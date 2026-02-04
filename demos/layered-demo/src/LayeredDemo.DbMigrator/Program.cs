@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -25,15 +26,13 @@ class Program
             .WriteTo.Async(c => c.Console())
             .CreateLogger();
 
-        await CreateHostBuilder(args).RunConsoleAsync();
-    }
+        var builder = Host.CreateApplicationBuilder(args);
+        builder.Configuration.AddJsonFile("appsettings.secrets.json", optional: true, reloadOnChange: true);
+        builder.AddServiceDefaults();
+        builder.Logging.ClearProviders();
+        builder.Services.AddHostedService<DbMigratorHostedService>();
 
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
-        Host.CreateDefaultBuilder(args)
-            .AddAppSettingsSecretsJson()
-            .ConfigureLogging((context, logging) => logging.ClearProviders())
-            .ConfigureServices((hostContext, services) =>
-            {
-                services.AddHostedService<DbMigratorHostedService>();
-            });
+        var host = builder.Build();
+        await host.RunAsync();
+    }
 }

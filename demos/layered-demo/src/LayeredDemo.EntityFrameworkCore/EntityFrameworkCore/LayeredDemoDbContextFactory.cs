@@ -17,7 +17,7 @@ public class LayeredDemoDbContextFactory : IDesignTimeDbContextFactory<LayeredDe
         LayeredDemoEfCoreEntityExtensionMappings.Configure();
 
         var builder = new DbContextOptionsBuilder<LayeredDemoDbContext>()
-            .UseSqlite(configuration.GetConnectionString("Default"));
+            .UseNpgsql(configuration.GetConnectionString("Default"));
         
         return new LayeredDemoDbContext(builder.Options);
     }
