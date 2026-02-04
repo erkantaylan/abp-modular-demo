@@ -21,6 +21,10 @@ public class Program
         {
             Log.Information("Starting web host.");
             var builder = WebApplication.CreateBuilder(args);
+
+            // Add .NET Aspire service defaults (OpenTelemetry, health checks, service discovery)
+            builder.AddServiceDefaults();
+
             builder.Host
                 .AddAppSettingsSecretsJson()
                 .UseAutofac()
@@ -41,6 +45,10 @@ public class Program
                 });
             await builder.AddApplicationAsync<LayeredDemoBlazorModule>();
             var app = builder.Build();
+
+            // Map .NET Aspire default endpoints (health checks)
+            app.MapDefaultEndpoints();
+
             await app.InitializeApplicationAsync();
             await app.RunAsync();
             return 0;

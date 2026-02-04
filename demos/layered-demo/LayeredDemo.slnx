@@ -12,6 +12,8 @@
         <Project Path="src/LayeredDemo.HttpApi.Client/LayeredDemo.HttpApi.Client.csproj" />
         <Project Path="src/LayeredDemo.DbMigrator/LayeredDemo.DbMigrator.csproj" />
         <Project Path="src/LayeredDemo.Blazor/LayeredDemo.Blazor.csproj" />
+        <Project Path="src/LayeredDemo.ServiceDefaults/LayeredDemo.ServiceDefaults.csproj" />
+        <Project Path="src/LayeredDemo.AppHost/LayeredDemo.AppHost.csproj" />
     </Folder>
     <Folder Name="/test/">
         <Project Path="test/LayeredDemo.Application.Tests/LayeredDemo.Application.Tests.csproj" />
