@@ -13,7 +13,6 @@ var dbMigrator = builder.AddProject<Projects.LayeredDemo_DbMigrator>("dbmigrator
 
 builder.AddProject<Projects.LayeredDemo_Blazor>("blazor")
     .WithExternalHttpEndpoints()
-    .WithHttpsHealthCheck("/health")
     .WithReference(database)
     .WaitForCompletion(dbMigrator);
 
