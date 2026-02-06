@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LayeredDemo.Domain\LayeredDemo.Domain.csproj" />
+    <ProjectReference Include="..\features\LayeredDemo.Features.Todo\LayeredDemo.Features.Todo.csproj" />
   </ItemGroup>
 
   <ItemGroup>

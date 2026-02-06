@@ -1,8 +1,6 @@
 ﻿using System.Threading.Tasks;
 using LayeredDemo.Localization;
-using LayeredDemo.Permissions;
 using LayeredDemo.MultiTenancy;
-using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.SettingManagement.Blazor.Menus;
 using Volo.Abp.TenantManagement.Blazor.Navigation;
@@ -23,7 +21,7 @@ public class LayeredDemoMenuContributor : IMenuContributor
     private Task ConfigureMainMenuAsync(MenuConfigurationContext context)
     {
         var l = context.GetLocalizer<LayeredDemoResource>();
-        
+
         context.Menu.Items.Insert(
             0,
             new ApplicationMenuItem(
@@ -35,20 +33,10 @@ public class LayeredDemoMenuContributor : IMenuContributor
             )
         );
 
-        context.Menu.AddItem(
-            new ApplicationMenuItem(
-                LayeredDemoMenus.Todos,
-                l["Menu:Todos"],
-                "/todos",
-                icon: "fas fa-list-check",
-                order: 2
-            ).RequirePermissions(LayeredDemoPermissions.Todos.Default)
-        );
-
         //Administration
         var administration = context.Menu.GetAdministration();
         administration.Order = 6;
-    
+
         if (MultiTenancyConsts.IsEnabled)
         {
             administration.SetSubItemOrder(TenantManagementMenuNames.GroupName, 1);

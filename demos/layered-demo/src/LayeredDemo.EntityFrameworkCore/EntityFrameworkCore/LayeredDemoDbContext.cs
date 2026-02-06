@@ -1,3 +1,4 @@
+using LayeredDemo.Features.Todo.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
@@ -80,14 +81,8 @@ public class LayeredDemoDbContext :
         builder.ConfigureTenantManagement();
         builder.ConfigureBlobStoring();
         
-        /* Configure your own tables/entities inside here */
+        /* Configure feature modules */
 
-        builder.Entity<Todos.Todo>(b =>
-        {
-            b.ToTable(LayeredDemoConsts.DbTablePrefix + "Todos", LayeredDemoConsts.DbSchema);
-            b.ConfigureByConvention();
-            b.Property(x => x.Title).IsRequired().HasMaxLength(256);
-            b.Property(x => x.Description).HasMaxLength(1024);
-        });
+        builder.ConfigureTodoFeature();
     }
 }
