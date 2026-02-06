@@ -11,8 +11,10 @@ public class LayeredDemoPermissionDefinitionProvider : PermissionDefinitionProvi
     {
         var myGroup = context.AddGroup(LayeredDemoPermissions.GroupName);
 
-        //Define your own permissions here. Example:
-        //myGroup.AddPermission(LayeredDemoPermissions.MyPermission1, L("Permission:MyPermission1"));
+        var todosPermission = myGroup.AddPermission(LayeredDemoPermissions.Todos.Default, L("Permission:Todos"));
+        todosPermission.AddChild(LayeredDemoPermissions.Todos.Create, L("Permission:Todos.Create"));
+        todosPermission.AddChild(LayeredDemoPermissions.Todos.Edit, L("Permission:Todos.Edit"));
+        todosPermission.AddChild(LayeredDemoPermissions.Todos.Delete, L("Permission:Todos.Delete"));
     }
 
     private static LocalizableString L(string name)

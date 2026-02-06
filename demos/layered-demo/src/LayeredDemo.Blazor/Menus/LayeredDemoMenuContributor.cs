@@ -35,6 +35,16 @@ public class LayeredDemoMenuContributor : IMenuContributor
             )
         );
 
+        context.Menu.AddItem(
+            new ApplicationMenuItem(
+                LayeredDemoMenus.Todos,
+                l["Menu:Todos"],
+                "/todos",
+                icon: "fas fa-list-check",
+                order: 2
+            ).RequirePermissions(LayeredDemoPermissions.Todos.Default)
+        );
+
         //Administration
         var administration = context.Menu.GetAdministration();
         administration.Order = 6;

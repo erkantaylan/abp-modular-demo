@@ -26,6 +26,7 @@ public class LayeredDemoDbContext :
     IIdentityDbContext
 {
     /* Add DbSet properties for your Aggregate Roots / Entities here. */
+    public DbSet<Todos.Todo> Todos { get; set; }
 
 
     #region Entities from the modules
@@ -81,11 +82,12 @@ public class LayeredDemoDbContext :
         
         /* Configure your own tables/entities inside here */
 
-        //builder.Entity<YourEntity>(b =>
-        //{
-        //    b.ToTable(LayeredDemoConsts.DbTablePrefix + "YourEntities", LayeredDemoConsts.DbSchema);
-        //    b.ConfigureByConvention(); //auto configure for the base class props
-        //    //...
-        //});
+        builder.Entity<Todos.Todo>(b =>
+        {
+            b.ToTable(LayeredDemoConsts.DbTablePrefix + "Todos", LayeredDemoConsts.DbSchema);
+            b.ConfigureByConvention();
+            b.Property(x => x.Title).IsRequired().HasMaxLength(256);
+            b.Property(x => x.Description).HasMaxLength(1024);
+        });
     }
 }
