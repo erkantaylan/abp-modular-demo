@@ -1,25 +1,30 @@
 <Solution>
-    <Configurations>
-        <Platform Name="Any CPU" />
-    </Configurations>
-    <Folder Name="/src/">
-        <Project Path="src/LayeredDemo.Domain/LayeredDemo.Domain.csproj" />
-        <Project Path="src/LayeredDemo.Application/LayeredDemo.Application.csproj" />
-        <Project Path="src/LayeredDemo.EntityFrameworkCore/LayeredDemo.EntityFrameworkCore.csproj" />
+    <Folder Name="/0. Aspire/">
+        <Project Path="src/LayeredDemo.AppHost/LayeredDemo.AppHost.csproj" />
+        <Project Path="src/LayeredDemo.ServiceDefaults/LayeredDemo.ServiceDefaults.csproj" />
+    </Folder>
+    <Folder Name="/1. Domain/">
         <Project Path="src/LayeredDemo.Domain.Shared/LayeredDemo.Domain.Shared.csproj" />
+        <Project Path="src/LayeredDemo.Domain/LayeredDemo.Domain.csproj" />
+    </Folder>
+    <Folder Name="/2. Application/">
         <Project Path="src/LayeredDemo.Application.Contracts/LayeredDemo.Application.Contracts.csproj" />
+        <Project Path="src/LayeredDemo.Application/LayeredDemo.Application.csproj" />
+    </Folder>
+    <Folder Name="/3. Infrastructure/">
+        <Project Path="src/LayeredDemo.EntityFrameworkCore/LayeredDemo.EntityFrameworkCore.csproj" />
         <Project Path="src/LayeredDemo.HttpApi/LayeredDemo.HttpApi.csproj" />
         <Project Path="src/LayeredDemo.HttpApi.Client/LayeredDemo.HttpApi.Client.csproj" />
-        <Project Path="src/LayeredDemo.DbMigrator/LayeredDemo.DbMigrator.csproj" />
+    </Folder>
+    <Folder Name="/4. Host/">
         <Project Path="src/LayeredDemo.Blazor/LayeredDemo.Blazor.csproj" />
-        <Project Path="src/LayeredDemo.ServiceDefaults/LayeredDemo.ServiceDefaults.csproj" />
-        <Project Path="src/LayeredDemo.AppHost/LayeredDemo.AppHost.csproj" />
+        <Project Path="src/LayeredDemo.DbMigrator/LayeredDemo.DbMigrator.csproj" />
     </Folder>
     <Folder Name="/test/">
-        <Project Path="test/LayeredDemo.Application.Tests/LayeredDemo.Application.Tests.csproj" />
-        <Project Path="test/LayeredDemo.EntityFrameworkCore.Tests/LayeredDemo.EntityFrameworkCore.Tests.csproj" />
         <Project Path="test/LayeredDemo.TestBase/LayeredDemo.TestBase.csproj" />
         <Project Path="test/LayeredDemo.Domain.Tests/LayeredDemo.Domain.Tests.csproj" />
+        <Project Path="test/LayeredDemo.Application.Tests/LayeredDemo.Application.Tests.csproj" />
+        <Project Path="test/LayeredDemo.EntityFrameworkCore.Tests/LayeredDemo.EntityFrameworkCore.Tests.csproj" />
         <Project Path="test/LayeredDemo.HttpApi.Client.ConsoleTestApp/LayeredDemo.HttpApi.Client.ConsoleTestApp.csproj" />
     </Folder>
 </Solution>
