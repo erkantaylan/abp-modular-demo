@@ -20,11 +20,19 @@
         <Project Path="src/LayeredDemo.Blazor/LayeredDemo.Blazor.csproj" />
         <Project Path="src/LayeredDemo.DbMigrator/LayeredDemo.DbMigrator.csproj" />
     </Folder>
+    <Folder Name="/5. Features/">
+        <Folder Name="/5. Features/Todo/">
+            <Project Path="src/features/LayeredDemo.Features.Todo/LayeredDemo.Features.Todo.csproj" />
+        </Folder>
+    </Folder>
     <Folder Name="/test/">
         <Project Path="test/LayeredDemo.TestBase/LayeredDemo.TestBase.csproj" />
         <Project Path="test/LayeredDemo.Domain.Tests/LayeredDemo.Domain.Tests.csproj" />
         <Project Path="test/LayeredDemo.Application.Tests/LayeredDemo.Application.Tests.csproj" />
         <Project Path="test/LayeredDemo.EntityFrameworkCore.Tests/LayeredDemo.EntityFrameworkCore.Tests.csproj" />
         <Project Path="test/LayeredDemo.HttpApi.Client.ConsoleTestApp/LayeredDemo.HttpApi.Client.ConsoleTestApp.csproj" />
+    </Folder>
+    <Folder Name="/test/features/">
+        <Project Path="test/features/LayeredDemo.Features.Todo.Tests/LayeredDemo.Features.Todo.Tests.csproj" />
     </Folder>
 </Solution>

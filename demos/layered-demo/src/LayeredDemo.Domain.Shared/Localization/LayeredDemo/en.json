@@ -4,26 +4,6 @@
     "AppName": "LayeredDemo",
     "Menu:Home": "Home",
     "LongWelcomeMessage": "Welcome to the application. This is a startup project based on the ABP framework. For more information visit",
-    "Welcome": "Welcome",
-    "Menu:Todos": "Todos",
-    "Todos": "Todos",
-    "Todo": "Todo",
-    "NewTodo": "New Todo",
-    "EditTodo": "Edit Todo",
-    "Title": "Title",
-    "Description": "Description",
-    "Status": "Status",
-    "DueDate": "Due Date",
-    "CreatedBy": "Created By",
-    "CreationTime": "Creation Time",
-    "MarkAsDone": "Mark as Done",
-    "TodoDeletionConfirmation": "Are you sure you want to delete this todo?",
-    "Enum:TodoStatus.NotStarted": "Not Started",
-    "Enum:TodoStatus.InProgress": "In Progress",
-    "Enum:TodoStatus.Done": "Done",
-    "Permission:Todos": "Todo Management",
-    "Permission:Todos.Create": "Create",
-    "Permission:Todos.Edit": "Edit",
-    "Permission:Todos.Delete": "Delete"
+    "Welcome": "Welcome"
   }
 }

@@ -32,6 +32,7 @@
     <ProjectReference Include="..\LayeredDemo.HttpApi\LayeredDemo.HttpApi.csproj" />
     <ProjectReference Include="..\LayeredDemo.EntityFrameworkCore\LayeredDemo.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\LayeredDemo.ServiceDefaults\LayeredDemo.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\features\LayeredDemo.Features.Todo\LayeredDemo.Features.Todo.csproj" />
     <PackageReference Include="Volo.Abp.Autofac" Version="10.0.2" />
     <PackageReference Include="Volo.Abp.Swashbuckle" Version="10.0.2" />
     <PackageReference Include="Volo.Abp.AspNetCore.Serilog" Version="10.0.2" />
