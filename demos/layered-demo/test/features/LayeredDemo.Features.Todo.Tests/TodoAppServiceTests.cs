@@ -1,7 +1,9 @@
 using System;
 using System.Threading.Tasks;
-using LayeredDemo.Todos;
+using LayeredDemo.Application;
+using LayeredDemo.Domain;
 using Shouldly;
+using Volo.Abp.Application.Dtos;
 using Xunit;
 
 namespace LayeredDemo.Features.Todo.Tests;
@@ -18,13 +20,14 @@ public sealed class TodoAppServiceTests : TodoFeatureTestBase
     [Fact]
     public async Task Should_Create_Todo()
     {
-        var result = await _todoAppService.CreateAsync(new CreateUpdateTodoDto
-        {
-            Title = "Test Todo",
-            Description = "Test Description",
-            Status = TodoStatus.NotStarted,
-            DueDate = DateTime.UtcNow.AddDays(7)
-        });
+        TodoDto result = await _todoAppService.CreateAsync(
+            new CreateUpdateTodoDto
+            {
+                Title = "Test Todo",
+                Description = "Test Description",
+                Status = TodoStatus.NotStarted,
+                DueDate = DateTime.UtcNow.AddDays(7)
+            });
 
         result.ShouldNotBeNull();
         result.Id.ShouldNotBe(Guid.Empty);
@@ -37,19 +40,21 @@ public sealed class TodoAppServiceTests : TodoFeatureTestBase
     [Fact]
     public async Task Should_Get_List()
     {
-        await _todoAppService.CreateAsync(new CreateUpdateTodoDto
-        {
-            Title = "Todo 1",
-            Status = TodoStatus.NotStarted
-        });
+        await _todoAppService.CreateAsync(
+            new CreateUpdateTodoDto
+            {
+                Title = "Todo 1",
+                Status = TodoStatus.NotStarted
+            });
 
-        await _todoAppService.CreateAsync(new CreateUpdateTodoDto
-        {
-            Title = "Todo 2",
-            Status = TodoStatus.InProgress
-        });
+        await _todoAppService.CreateAsync(
+            new CreateUpdateTodoDto
+            {
+                Title = "Todo 2",
+                Status = TodoStatus.InProgress
+            });
 
-        var result = await _todoAppService.GetListAsync(new TodoGetListInput());
+        PagedResultDto<TodoDto> result = await _todoAppService.GetListAsync(new TodoGetListInput());
 
         result.ShouldNotBeNull();
         result.TotalCount.ShouldBeGreaterThanOrEqualTo(2);
@@ -58,18 +63,21 @@ public sealed class TodoAppServiceTests : TodoFeatureTestBase
     [Fact]
     public async Task Should_Update_Todo()
     {
-        var created = await _todoAppService.CreateAsync(new CreateUpdateTodoDto
-        {
-            Title = "Original Title",
-            Status = TodoStatus.NotStarted
-        });
+        TodoDto created = await _todoAppService.CreateAsync(
+            new CreateUpdateTodoDto
+            {
+                Title = "Original Title",
+                Status = TodoStatus.NotStarted
+            });
 
-        var updated = await _todoAppService.UpdateAsync(created.Id, new CreateUpdateTodoDto
-        {
-            Title = "Updated Title",
-            Status = TodoStatus.InProgress,
-            Description = "Added description"
-        });
+        TodoDto updated = await _todoAppService.UpdateAsync(
+            created.Id,
+            new CreateUpdateTodoDto
+            {
+                Title = "Updated Title",
+                Status = TodoStatus.InProgress,
+                Description = "Added description"
+            });
 
         updated.Title.ShouldBe("Updated Title");
         updated.Status.ShouldBe(TodoStatus.InProgress);
@@ -79,18 +87,20 @@ public sealed class TodoAppServiceTests : TodoFeatureTestBase
     [Fact]
     public async Task Should_Delete_Todo()
     {
-        var created = await _todoAppService.CreateAsync(new CreateUpdateTodoDto
-        {
-            Title = "To Be Deleted",
-            Status = TodoStatus.NotStarted
-        });
+        TodoDto created = await _todoAppService.CreateAsync(
+            new CreateUpdateTodoDto
+            {
+                Title = "To Be Deleted",
+                Status = TodoStatus.NotStarted
+            });
 
         await _todoAppService.DeleteAsync(created.Id);
 
-        var list = await _todoAppService.GetListAsync(new TodoGetListInput
-        {
-            Filter = "To Be Deleted"
-        });
+        PagedResultDto<TodoDto> list = await _todoAppService.GetListAsync(
+            new TodoGetListInput
+            {
+                Filter = "To Be Deleted"
+            });
 
         list.Items.ShouldNotContain(x => x.Id == created.Id);
     }
@@ -98,22 +108,25 @@ public sealed class TodoAppServiceTests : TodoFeatureTestBase
     [Fact]
     public async Task Should_Filter_By_Title()
     {
-        await _todoAppService.CreateAsync(new CreateUpdateTodoDto
-        {
-            Title = "Unique Filter Test",
-            Status = TodoStatus.NotStarted
-        });
+        await _todoAppService.CreateAsync(
+            new CreateUpdateTodoDto
+            {
+                Title = "Unique Filter Test",
+                Status = TodoStatus.NotStarted
+            });
 
-        await _todoAppService.CreateAsync(new CreateUpdateTodoDto
-        {
-            Title = "Other Todo",
-            Status = TodoStatus.Done
-        });
+        await _todoAppService.CreateAsync(
+            new CreateUpdateTodoDto
+            {
+                Title = "Other Todo",
+                Status = TodoStatus.Done
+            });
 
-        var result = await _todoAppService.GetListAsync(new TodoGetListInput
-        {
-            Filter = "Unique Filter"
-        });
+        PagedResultDto<TodoDto> result = await _todoAppService.GetListAsync(
+            new TodoGetListInput
+            {
+                Filter = "Unique Filter"
+            });
 
         result.Items.ShouldContain(x => x.Title == "Unique Filter Test");
         result.Items.ShouldNotContain(x => x.Title == "Other Todo");
@@ -122,11 +135,12 @@ public sealed class TodoAppServiceTests : TodoFeatureTestBase
     [Fact]
     public async Task Should_Track_Creator()
     {
-        var created = await _todoAppService.CreateAsync(new CreateUpdateTodoDto
-        {
-            Title = "Creator Tracking Test",
-            Status = TodoStatus.NotStarted
-        });
+        TodoDto created = await _todoAppService.CreateAsync(
+            new CreateUpdateTodoDto
+            {
+                Title = "Creator Tracking Test",
+                Status = TodoStatus.NotStarted
+            });
 
         created.CreatorId.ShouldNotBeNull();
         created.CreationTime.ShouldNotBe(default);
@@ -135,19 +149,22 @@ public sealed class TodoAppServiceTests : TodoFeatureTestBase
     [Fact]
     public async Task Should_Mark_As_Done()
     {
-        var created = await _todoAppService.CreateAsync(new CreateUpdateTodoDto
-        {
-            Title = "Mark Done Test",
-            Status = TodoStatus.NotStarted
-        });
+        TodoDto created = await _todoAppService.CreateAsync(
+            new CreateUpdateTodoDto
+            {
+                Title = "Mark Done Test",
+                Status = TodoStatus.NotStarted
+            });
 
-        var updated = await _todoAppService.UpdateAsync(created.Id, new CreateUpdateTodoDto
-        {
-            Title = created.Title,
-            Description = created.Description,
-            Status = TodoStatus.Done,
-            DueDate = created.DueDate
-        });
+        TodoDto updated = await _todoAppService.UpdateAsync(
+            created.Id,
+            new CreateUpdateTodoDto
+            {
+                Title = created.Title,
+                Description = created.Description,
+                Status = TodoStatus.Done,
+                DueDate = created.DueDate
+            });
 
         updated.Status.ShouldBe(TodoStatus.Done);
     }

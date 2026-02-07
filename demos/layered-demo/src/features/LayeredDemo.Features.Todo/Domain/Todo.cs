@@ -1,7 +1,7 @@
 using System;
 using Volo.Abp.Domain.Entities.Auditing;
 
-namespace LayeredDemo.Todos;
+namespace LayeredDemo.Domain;
 
 public class Todo : FullAuditedAggregateRoot<Guid>
 {

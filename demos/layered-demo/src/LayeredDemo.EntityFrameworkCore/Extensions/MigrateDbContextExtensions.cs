@@ -7,9 +7,8 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using OpenTelemetry.Trace;
 
-namespace LayeredDemo.EntityFrameworkCore.Extensions;
+namespace LayeredDemo.Extensions;
 
 public static class MigrateDbContextExtensions
 {

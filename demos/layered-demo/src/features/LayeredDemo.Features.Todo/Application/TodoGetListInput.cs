@@ -1,6 +1,6 @@
 using Volo.Abp.Application.Dtos;
 
-namespace LayeredDemo.Todos;
+namespace LayeredDemo.Application;
 
 public class TodoGetListInput : PagedAndSortedResultRequestDto
 {

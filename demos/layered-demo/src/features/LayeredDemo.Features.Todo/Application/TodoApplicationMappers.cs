@@ -1,7 +1,8 @@
+using LayeredDemo.Domain;
 using Riok.Mapperly.Abstractions;
 using Volo.Abp.Mapperly;
 
-namespace LayeredDemo.Todos;
+namespace LayeredDemo.Application;
 
 [Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Target)]
 public partial class TodoToTodoDtoMapper : MapperBase<Todo, TodoDto>

@@ -1,4 +1,3 @@
-using LayeredDemo.Features.Todo.Localization;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Localization;
 

@@ -1,9 +1,10 @@
 using System.Threading.Tasks;
-using LayeredDemo.EntityFrameworkCore.Extensions;
+using LayeredDemo.EntityFrameworkCore;
+using LayeredDemo.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace LayeredDemo.EntityFrameworkCore.Seeds;
+namespace LayeredDemo.Seeds;
 
 public class LayeredDemoDbSeeds : IDbSeeder<LayeredDemoDbContext>
 {

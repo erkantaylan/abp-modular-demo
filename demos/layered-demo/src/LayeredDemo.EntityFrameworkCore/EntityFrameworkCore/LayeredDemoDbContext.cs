@@ -1,4 +1,5 @@
-using LayeredDemo.Features.Todo.Infrastructure;
+using LayeredDemo.Domain;
+using LayeredDemo.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
@@ -27,7 +28,7 @@ public class LayeredDemoDbContext :
     IIdentityDbContext
 {
     /* Add DbSet properties for your Aggregate Roots / Entities here. */
-    public DbSet<Todos.Todo> Todos { get; set; }
+    public DbSet<Todo> Todos { get; set; }
 
 
     #region Entities from the modules

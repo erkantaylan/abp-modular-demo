@@ -1,14 +1,14 @@
-using LayeredDemo.Todos;
+using LayeredDemo.Domain;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 
-namespace LayeredDemo.Features.Todo.Infrastructure;
+namespace LayeredDemo.Infrastructure;
 
 public static class TodoEfCoreConfiguration
 {
     public static void ConfigureTodoFeature(this ModelBuilder builder)
     {
-        builder.Entity<Todos.Todo>(b =>
+        builder.Entity<Todo>(b =>
         {
             b.ToTable("AppTodos");
             b.ConfigureByConvention();

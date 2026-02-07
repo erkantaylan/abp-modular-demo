@@ -1,7 +1,8 @@
 using System;
+using LayeredDemo.Domain;
 using Volo.Abp.Application.Dtos;
 
-namespace LayeredDemo.Todos;
+namespace LayeredDemo.Application;
 
 public class TodoDto : FullAuditedEntityDto<Guid>
 {

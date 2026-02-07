@@ -1,14 +1,15 @@
 @page "/todos"
 @attribute [Authorize]
-@using LayeredDemo.Todos
+@inject AbpBlazorMessageLocalizerHelper<TodoResource> Lh
+@using LayeredDemo.Application
+@using LayeredDemo.Domain
 @using LayeredDemo.Permissions
-@using LayeredDemo.Features.Todo.Localization
-@using Microsoft.AspNetCore.Authorization
-@using Volo.Abp.AspNetCore.Components.Web
-@using Volo.Abp.BlazoriseUI
-@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
-@inject AbpBlazorMessageLocalizerHelper<TodoResource> LH
-@inherits AbpCrudPageBase<ITodoAppService, TodoDto, Guid, TodoGetListInput, CreateUpdateTodoDto>
+@inherits AbpCrudPageBase<
+    LayeredDemo.Application.ITodoAppService,
+    LayeredDemo.Application.TodoDto,
+    Guid,
+    LayeredDemo.Application.TodoGetListInput,
+    LayeredDemo.Application.CreateUpdateTodoDto>
 
 <Card>
     <CardHeader>
@@ -39,37 +40,37 @@
                             <EntityAction TItem="TodoDto"
                                           Visible="@HasUpdatePermission"
                                           Clicked="() => OpenEditModalAsync(context)"
-                                          Text="@L["Edit"]" />
+                                          Text="@L["Edit"]"/>
                             @if (context.Status != TodoStatus.Done)
                             {
                                 <EntityAction TItem="TodoDto"
                                               Visible="@HasUpdatePermission"
                                               Clicked="() => MarkAsDoneAsync(context)"
-                                              Text="@L["MarkAsDone"]" />
+                                              Text="@L["MarkAsDone"]"/>
                             }
                             <EntityAction TItem="TodoDto"
                                           Visible="@HasDeletePermission"
                                           Clicked="() => DeleteEntityAsync(context)"
                                           Text="@L["Delete"]"
-                                          ConfirmationMessage="@(() => L["TodoDeletionConfirmation"])" />
+                                          ConfirmationMessage="@(() => L["TodoDeletionConfirmation"])"/>
                         </EntityActions>
                     </DisplayTemplate>
                 </DataGridEntityActionsColumn>
-                <DataGridColumn TItem="TodoDto" Field="@nameof(TodoDto.Title)" Caption="@L["Title"]" />
+                <DataGridColumn TItem="TodoDto" Field="@nameof(TodoDto.Title)" Caption="@L["Title"]"/>
                 <DataGridColumn TItem="TodoDto" Field="@nameof(TodoDto.Status)" Caption="@L["Status"]">
                     <DisplayTemplate>
                         @{
-                            var statusClass = context.Status switch
+                            string statusClass = context.Status switch
                             {
-                                TodoStatus.Done => "bg-success",
+                                TodoStatus.Done       => "bg-success",
                                 TodoStatus.InProgress => "bg-primary",
-                                _ => "bg-secondary"
+                                _                     => "bg-secondary"
                             };
                         }
                         <span class="badge @statusClass">@L[$"Enum:TodoStatus.{context.Status}"]</span>
                     </DisplayTemplate>
                 </DataGridColumn>
-                <DataGridColumn TItem="TodoDto" Field="@nameof(TodoDto.CreatorUserName)" Caption="@L["CreatedBy"]" />
+                <DataGridColumn TItem="TodoDto" Field="@nameof(TodoDto.CreatorUserName)" Caption="@L["CreatedBy"]"/>
                 <DataGridColumn TItem="TodoDto" Field="@nameof(TodoDto.DueDate)" Caption="@L["DueDate"]">
                     <DisplayTemplate>
                         @context.DueDate?.ToString("yyyy-MM-dd")
@@ -91,28 +92,28 @@
         <Form>
             <ModalHeader>
                 <ModalTitle>@L["NewTodo"]</ModalTitle>
-                <CloseButton Clicked="CloseCreateModalAsync" />
+                <CloseButton Clicked="CloseCreateModalAsync"/>
             </ModalHeader>
             <ModalBody>
                 <Validations @ref="@CreateValidationsRef" Model="@NewEntity" ValidateOnLoad="false">
-                    <Validation MessageLocalizer="@LH.Localize">
+                    <Validation MessageLocalizer="@Lh.Localize">
                         <Field>
                             <FieldLabel>@L["Title"]</FieldLabel>
                             <TextEdit @bind-Text="@NewEntity.Title">
                                 <Feedback>
-                                    <ValidationError />
+                                    <ValidationError/>
                                 </Feedback>
                             </TextEdit>
                         </Field>
                     </Validation>
                     <Field>
                         <FieldLabel>@L["Description"]</FieldLabel>
-                        <MemoEdit Rows="3" @bind-Text="@NewEntity.Description" />
+                        <MemoEdit Rows="3" @bind-Text="@NewEntity.Description"/>
                     </Field>
                     <Field>
                         <FieldLabel>@L["Status"]</FieldLabel>
                         <Select TValue="TodoStatus" @bind-SelectedValue="@NewEntity.Status">
-                            @foreach (var status in Enum.GetValues<TodoStatus>())
+                            @foreach (TodoStatus status in Enum.GetValues<TodoStatus>())
                             {
                                 <SelectItem TValue="TodoStatus" Value="@status">
                                     @L[$"Enum:TodoStatus.{status}"]
@@ -122,13 +123,13 @@
                     </Field>
                     <Field>
                         <FieldLabel>@L["DueDate"]</FieldLabel>
-                        <DateEdit TValue="DateTime?" @bind-Date="@NewEntity.DueDate" />
+                        <DateEdit TValue="DateTime?" @bind-Date="@NewEntity.DueDate"/>
                     </Field>
                 </Validations>
             </ModalBody>
             <ModalFooter>
                 <Button Color="Color.Secondary" Clicked="CloseCreateModalAsync">@L["Cancel"]</Button>
-                <SubmitButton Clicked="@CreateEntityAsync" />
+                <SubmitButton Clicked="@CreateEntityAsync"/>
             </ModalFooter>
         </Form>
     </ModalContent>
@@ -140,28 +141,28 @@
         <Form>
             <ModalHeader>
                 <ModalTitle>@L["EditTodo"]</ModalTitle>
-                <CloseButton Clicked="CloseEditModalAsync" />
+                <CloseButton Clicked="CloseEditModalAsync"/>
             </ModalHeader>
             <ModalBody>
                 <Validations @ref="@EditValidationsRef" Model="@EditingEntity" ValidateOnLoad="false">
-                    <Validation MessageLocalizer="@LH.Localize">
+                    <Validation MessageLocalizer="@Lh.Localize">
                         <Field>
                             <FieldLabel>@L["Title"]</FieldLabel>
                             <TextEdit @bind-Text="@EditingEntity.Title">
                                 <Feedback>
-                                    <ValidationError />
+                                    <ValidationError/>
                                 </Feedback>
                             </TextEdit>
                         </Field>
                     </Validation>
                     <Field>
                         <FieldLabel>@L["Description"]</FieldLabel>
-                        <MemoEdit Rows="3" @bind-Text="@EditingEntity.Description" />
+                        <MemoEdit Rows="3" @bind-Text="@EditingEntity.Description"/>
                     </Field>
                     <Field>
                         <FieldLabel>@L["Status"]</FieldLabel>
                         <Select TValue="TodoStatus" @bind-SelectedValue="@EditingEntity.Status">
-                            @foreach (var status in Enum.GetValues<TodoStatus>())
+                            @foreach (TodoStatus status in Enum.GetValues<TodoStatus>())
                             {
                                 <SelectItem TValue="TodoStatus" Value="@status">
                                     @L[$"Enum:TodoStatus.{status}"]
@@ -171,19 +172,20 @@
                     </Field>
                     <Field>
                         <FieldLabel>@L["DueDate"]</FieldLabel>
-                        <DateEdit TValue="DateTime?" @bind-Date="@EditingEntity.DueDate" />
+                        <DateEdit TValue="DateTime?" @bind-Date="@EditingEntity.DueDate"/>
                     </Field>
                 </Validations>
             </ModalBody>
             <ModalFooter>
                 <Button Color="Color.Secondary" Clicked="CloseEditModalAsync">@L["Cancel"]</Button>
-                <SubmitButton Clicked="@UpdateEntityAsync" />
+                <SubmitButton Clicked="@UpdateEntityAsync"/>
             </ModalFooter>
         </Form>
     </ModalContent>
 </Modal>
 
 @code {
+
     public Todos()
     {
         LocalizationResource = typeof(TodoResource);
@@ -205,4 +207,5 @@
         await AppService.UpdateAsync(todo.Id, input);
         await GetEntitiesAsync();
     }
+
 }

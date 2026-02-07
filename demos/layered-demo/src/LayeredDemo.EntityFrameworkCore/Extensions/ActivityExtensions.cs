@@ -1,7 +1,7 @@
 using System;
 using System.Diagnostics;
 
-namespace LayeredDemo.EntityFrameworkCore.Extensions;
+namespace LayeredDemo.Extensions;
 
 public static class ActivityExtensions
 {

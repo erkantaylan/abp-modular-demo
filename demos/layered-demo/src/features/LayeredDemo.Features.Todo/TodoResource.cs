@@ -1,6 +1,6 @@
 using Volo.Abp.Localization;
 
-namespace LayeredDemo.Features.Todo.Localization;
+namespace LayeredDemo;
 
 [LocalizationResourceName("Todo")]
 public class TodoResource

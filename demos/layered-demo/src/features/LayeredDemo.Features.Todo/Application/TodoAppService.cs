@@ -2,13 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using LayeredDemo.Domain;
 using LayeredDemo.Permissions;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Identity;
 
-namespace LayeredDemo.Todos;
+namespace LayeredDemo.Application;
 
 public class TodoAppService
     : CrudAppService<Todo, TodoDto, Guid, TodoGetListInput, CreateUpdateTodoDto>,

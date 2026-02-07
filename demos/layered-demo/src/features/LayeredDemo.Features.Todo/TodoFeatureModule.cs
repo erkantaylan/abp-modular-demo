@@ -1,17 +1,16 @@
-using LayeredDemo.Features.Todo.Localization;
-using LayeredDemo.Features.Todo.Menus;
+using LayeredDemo.Menus;
 using Volo.Abp.Application;
 using Volo.Abp.AspNetCore.Components.Web;
+using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
 using Volo.Abp.BlazoriseUI;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Identity;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
-using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 
-namespace LayeredDemo.Features.Todo;
+namespace LayeredDemo;
 
 [DependsOn(
     typeof(AbpDddApplicationModule),

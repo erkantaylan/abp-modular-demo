@@ -1,10 +1,9 @@
 using System.Threading.Tasks;
-using LayeredDemo.Features.Todo.Localization;
 using LayeredDemo.Permissions;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.UI.Navigation;
 
-namespace LayeredDemo.Features.Todo.Menus;
+namespace LayeredDemo.Menus;
 
 public class TodoMenuContributor : IMenuContributor
 {

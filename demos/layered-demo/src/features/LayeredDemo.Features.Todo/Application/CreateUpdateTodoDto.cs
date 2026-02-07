@@ -1,7 +1,8 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using LayeredDemo.Domain;
 
-namespace LayeredDemo.Todos;
+namespace LayeredDemo.Application;
 
 public class CreateUpdateTodoDto
 {

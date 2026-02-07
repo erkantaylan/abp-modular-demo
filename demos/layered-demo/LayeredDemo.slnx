@@ -24,6 +24,7 @@
         <Folder Name="/5. Features/Todo/">
             <Project Path="src/features/LayeredDemo.Features.Todo/LayeredDemo.Features.Todo.csproj" />
         </Folder>
+        <Project Path="src/features/LayeredDemo.Features.Todo/LayeredDemo.Features.Todo.csproj" />
     </Folder>
     <Folder Name="/test/">
         <Project Path="test/LayeredDemo.TestBase/LayeredDemo.TestBase.csproj" />

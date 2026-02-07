@@ -1,4 +1,4 @@
-namespace LayeredDemo.Todos;
+namespace LayeredDemo.Domain;
 
 public enum TodoStatus
 {

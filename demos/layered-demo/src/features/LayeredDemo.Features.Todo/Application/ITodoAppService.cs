@@ -1,7 +1,7 @@
 using System;
 using Volo.Abp.Application.Services;
 
-namespace LayeredDemo.Todos;
+namespace LayeredDemo.Application;
 
 public interface ITodoAppService : ICrudAppService<TodoDto, Guid, TodoGetListInput, CreateUpdateTodoDto>
 {
