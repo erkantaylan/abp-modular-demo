@@ -1,0 +1,39 @@
+<Solution>
+    <Folder Name="/0. Aspire/">
+        <Project Path="src/MudBlazorDemo.AppHost/MudBlazorDemo.AppHost.csproj" />
+        <Project Path="src/MudBlazorDemo.ServiceDefaults/MudBlazorDemo.ServiceDefaults.csproj" />
+    </Folder>
+    <Folder Name="/1. Domain/">
+        <Project Path="src/MudBlazorDemo.Domain.Shared/MudBlazorDemo.Domain.Shared.csproj" />
+        <Project Path="src/MudBlazorDemo.Domain/MudBlazorDemo.Domain.csproj" />
+    </Folder>
+    <Folder Name="/2. Application/">
+        <Project Path="src/MudBlazorDemo.Application.Contracts/MudBlazorDemo.Application.Contracts.csproj" />
+        <Project Path="src/MudBlazorDemo.Application/MudBlazorDemo.Application.csproj" />
+    </Folder>
+    <Folder Name="/3. Infrastructure/">
+        <Project Path="src/MudBlazorDemo.EntityFrameworkCore/MudBlazorDemo.EntityFrameworkCore.csproj" />
+        <Project Path="src/MudBlazorDemo.HttpApi/MudBlazorDemo.HttpApi.csproj" />
+        <Project Path="src/MudBlazorDemo.HttpApi.Client/MudBlazorDemo.HttpApi.Client.csproj" />
+    </Folder>
+    <Folder Name="/4. Host/">
+        <Project Path="src/MudBlazorDemo.Blazor/MudBlazorDemo.Blazor.csproj" />
+        <Project Path="src/MudBlazorDemo.DbMigrator/MudBlazorDemo.DbMigrator.csproj" />
+    </Folder>
+    <Folder Name="/5. Features/">
+        <Folder Name="/5. Features/Todo/">
+            <Project Path="src/features/MudBlazorDemo.Features.Todo/MudBlazorDemo.Features.Todo.csproj" />
+        </Folder>
+        <Project Path="src/features/MudBlazorDemo.Features.Todo/MudBlazorDemo.Features.Todo.csproj" />
+    </Folder>
+    <Folder Name="/test/">
+        <Project Path="test/MudBlazorDemo.TestBase/MudBlazorDemo.TestBase.csproj" />
+        <Project Path="test/MudBlazorDemo.Domain.Tests/MudBlazorDemo.Domain.Tests.csproj" />
+        <Project Path="test/MudBlazorDemo.Application.Tests/MudBlazorDemo.Application.Tests.csproj" />
+        <Project Path="test/MudBlazorDemo.EntityFrameworkCore.Tests/MudBlazorDemo.EntityFrameworkCore.Tests.csproj" />
+        <Project Path="test/MudBlazorDemo.HttpApi.Client.ConsoleTestApp/MudBlazorDemo.HttpApi.Client.ConsoleTestApp.csproj" />
+    </Folder>
+    <Folder Name="/test/features/">
+        <Project Path="test/features/MudBlazorDemo.Features.Todo.Tests/MudBlazorDemo.Features.Todo.Tests.csproj" />
+    </Folder>
+</Solution>

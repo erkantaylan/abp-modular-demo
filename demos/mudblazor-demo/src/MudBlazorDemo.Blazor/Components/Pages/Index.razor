@@ -1,0 +1,74 @@
+@page "/"
+@inherits MudBlazorDemoComponentBase
+@using MudBlazor
+
+<MudGrid>
+    <MudItem xs="12" md="8">
+        <MudCard Elevation="2">
+            <MudCardContent>
+                <AuthorizeView>
+                    <NotAuthorized>
+                        <MudText Typo="Typo.h4" Class="mb-2">@L["Welcome"]</MudText>
+                        <MudText Typo="Typo.body1" Class="mb-4">@L["LongWelcomeMessage"]</MudText>
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" Href="/Account/Login"
+                                   StartIcon="@Icons.Material.Filled.Login" Class="mb-4">@L["Login"]</MudButton>
+                    </NotAuthorized>
+                </AuthorizeView>
+
+                <MudText Typo="Typo.h5" Class="mb-2">Getting Started</MudText>
+                <MudText Typo="Typo.body1" Class="mb-2">
+                    Learn how to create and run a new web application using the application startup template.
+                </MudText>
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" Href="https://abp.io/docs/latest/getting-started"
+                           Target="_blank" Class="mb-4">Getting Started</MudButton>
+
+                <MudText Typo="Typo.h5" Class="mb-2">Web Application Development Tutorial</MudText>
+                <MudText Typo="Typo.body1" Class="mb-2">
+                    Learn how to build an ABP based web application named Acme.BookStore.
+                </MudText>
+                <MudButton Variant="Variant.Outlined" Color="Color.Primary"
+                           Href="https://abp.io/docs/latest/tutorials/book-store/part-1?UI=MVC&DB=EF"
+                           Target="_blank">Explore Tutorial</MudButton>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+
+    <MudItem xs="12" md="4">
+        <MudCard Elevation="2" Class="mb-4">
+            <MudCardContent>
+                <MudText Typo="Typo.h6" Class="mb-2">MudBlazor Theme</MudText>
+                <MudText Typo="Typo.body2">
+                    This demo uses MudBlazor as the UI component library instead of LeptonX Lite / Blazorise,
+                    proving that ABP's modular architecture works with any Blazor component library.
+                </MudText>
+            </MudCardContent>
+        </MudCard>
+
+        <MudCard Elevation="2">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">Resources</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudList T="string" Dense="true">
+                    <MudListItem Icon="@Icons.Material.Filled.OpenInNew" Href="https://github.com/abpframework/abp/releases" Target="_blank">
+                        Latest Release Logs
+                    </MudListItem>
+                    <MudListItem Icon="@Icons.Material.Filled.OpenInNew" Href="https://abp.io/video-courses/essentials" Target="_blank">
+                        Video Courses
+                    </MudListItem>
+                    <MudListItem Icon="@Icons.Material.Filled.OpenInNew" Href="https://abp.io/docs/latest/Samples/Index" Target="_blank">
+                        Samples
+                    </MudListItem>
+                    <MudListItem Icon="@Icons.Material.Filled.OpenInNew" Href="https://abp.io/community/" Target="_blank">
+                        ABP Community
+                    </MudListItem>
+                    <MudListItem Icon="@Icons.Material.Filled.OpenInNew" Href="https://mudblazor.com" Target="_blank">
+                        MudBlazor Documentation
+                    </MudListItem>
+                </MudList>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+</MudGrid>

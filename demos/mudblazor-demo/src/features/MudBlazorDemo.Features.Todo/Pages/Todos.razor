@@ -1,0 +1,266 @@
+@page "/todos"
+@attribute [Authorize]
+@using MudBlazor
+@using MudBlazorDemo.Application
+@using MudBlazorDemo.Domain
+@using MudBlazorDemo.Permissions
+@using Volo.Abp.Application.Dtos
+@inject ITodoAppService TodoAppService
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+
+<MudCard Elevation="2">
+    <MudCardHeader>
+        <CardHeaderContent>
+            <MudText Typo="Typo.h5">Todos</MudText>
+        </CardHeaderContent>
+        <CardHeaderActions>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary"
+                       StartIcon="@Icons.Material.Filled.Add"
+                       OnClick="OpenCreateDialog">New Todo</MudButton>
+        </CardHeaderActions>
+    </MudCardHeader>
+    <MudCardContent>
+        <MudTable Items="@_todos" Dense="true" Hover="true" Bordered="false" Striped="true"
+                  Loading="@_loading" LoadingProgressColor="Color.Primary">
+            <HeaderContent>
+                <MudTh>Title</MudTh>
+                <MudTh>Status</MudTh>
+                <MudTh>Created By</MudTh>
+                <MudTh>Due Date</MudTh>
+                <MudTh>Created</MudTh>
+                <MudTh>Actions</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Title">@context.Title</MudTd>
+                <MudTd DataLabel="Status">
+                    @{
+                        var chipColor = context.Status switch
+                        {
+                            TodoStatus.Done => Color.Success,
+                            TodoStatus.InProgress => Color.Primary,
+                            _ => Color.Default
+                        };
+                    }
+                    <MudChip T="string" Color="@chipColor" Size="Size.Small">
+                        @(context.Status switch
+                        {
+                            TodoStatus.Done => "Done",
+                            TodoStatus.InProgress => "In Progress",
+                            _ => "Not Started"
+                        })
+                    </MudChip>
+                </MudTd>
+                <MudTd DataLabel="Created By">@context.CreatorUserName</MudTd>
+                <MudTd DataLabel="Due Date">@context.DueDate?.ToString("yyyy-MM-dd")</MudTd>
+                <MudTd DataLabel="Created">@context.CreationTime.ToString("g")</MudTd>
+                <MudTd DataLabel="Actions">
+                    <MudMenu Icon="@Icons.Material.Filled.MoreVert" Size="Size.Small" Dense="true">
+                        <MudMenuItem OnClick="@(() => OpenEditDialog(context))">Edit</MudMenuItem>
+                        @if (context.Status != TodoStatus.Done)
+                        {
+                            <MudMenuItem OnClick="@(() => MarkAsDoneAsync(context))">Mark as Done</MudMenuItem>
+                        }
+                        <MudMenuItem OnClick="@(() => DeleteAsync(context))">Delete</MudMenuItem>
+                    </MudMenu>
+                </MudTd>
+            </RowTemplate>
+            <NoRecordsContent>
+                <MudText>No todos found.</MudText>
+            </NoRecordsContent>
+        </MudTable>
+    </MudCardContent>
+</MudCard>
+
+@* Create Dialog *@
+<MudDialog @bind-Visible="_createDialogVisible" Options="_dialogOptions">
+    <TitleContent>
+        <MudText Typo="Typo.h6">New Todo</MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudForm @ref="_createForm">
+            <MudTextField @bind-Value="_newTodo.Title" Label="Title" Required="true"
+                          RequiredError="Title is required" MaxLength="256" />
+            <MudTextField @bind-Value="_newTodo.Description" Label="Description"
+                          Lines="3" MaxLength="1024" />
+            <MudSelect @bind-Value="_newTodo.Status" Label="Status" T="TodoStatus">
+                @foreach (TodoStatus status in Enum.GetValues<TodoStatus>())
+                {
+                    <MudSelectItem Value="@status">
+                        @(status switch
+                        {
+                            TodoStatus.Done => "Done",
+                            TodoStatus.InProgress => "In Progress",
+                            _ => "Not Started"
+                        })
+                    </MudSelectItem>
+                }
+            </MudSelect>
+            <MudDatePicker @bind-Date="_newTodoDueDate" Label="Due Date" Clearable="true" />
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@(() => _createDialogVisible = false)">Cancel</MudButton>
+        <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="CreateAsync">Save</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@* Edit Dialog *@
+<MudDialog @bind-Visible="_editDialogVisible" Options="_dialogOptions">
+    <TitleContent>
+        <MudText Typo="Typo.h6">Edit Todo</MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudForm @ref="_editForm">
+            <MudTextField @bind-Value="_editTodo.Title" Label="Title" Required="true"
+                          RequiredError="Title is required" MaxLength="256" />
+            <MudTextField @bind-Value="_editTodo.Description" Label="Description"
+                          Lines="3" MaxLength="1024" />
+            <MudSelect @bind-Value="_editTodo.Status" Label="Status" T="TodoStatus">
+                @foreach (TodoStatus status in Enum.GetValues<TodoStatus>())
+                {
+                    <MudSelectItem Value="@status">
+                        @(status switch
+                        {
+                            TodoStatus.Done => "Done",
+                            TodoStatus.InProgress => "In Progress",
+                            _ => "Not Started"
+                        })
+                    </MudSelectItem>
+                }
+            </MudSelect>
+            <MudDatePicker @bind-Date="_editTodoDueDate" Label="Due Date" Clearable="true" />
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@(() => _editDialogVisible = false)">Cancel</MudButton>
+        <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="UpdateAsync">Save</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    private List<TodoDto> _todos = new();
+    private bool _loading = true;
+
+    private bool _createDialogVisible;
+    private bool _editDialogVisible;
+    private MudForm? _createForm;
+    private MudForm? _editForm;
+    private CreateUpdateTodoDto _newTodo = new();
+    private CreateUpdateTodoDto _editTodo = new();
+    private Guid _editingTodoId;
+    private DateTime? _newTodoDueDate;
+    private DateTime? _editTodoDueDate;
+
+    private readonly DialogOptions _dialogOptions = new()
+    {
+        MaxWidth = MaxWidth.Small,
+        FullWidth = true,
+        CloseOnEscapeKey = true
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadTodosAsync();
+    }
+
+    private async Task LoadTodosAsync()
+    {
+        _loading = true;
+        try
+        {
+            var result = await TodoAppService.GetListAsync(new TodoGetListInput
+            {
+                MaxResultCount = 100,
+                SkipCount = 0
+            });
+            _todos = result.Items.ToList();
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+
+    private void OpenCreateDialog()
+    {
+        _newTodo = new CreateUpdateTodoDto();
+        _newTodoDueDate = null;
+        _createDialogVisible = true;
+    }
+
+    private void OpenEditDialog(TodoDto todo)
+    {
+        _editingTodoId = todo.Id;
+        _editTodo = new CreateUpdateTodoDto
+        {
+            Title = todo.Title,
+            Description = todo.Description,
+            Status = todo.Status,
+            DueDate = todo.DueDate
+        };
+        _editTodoDueDate = todo.DueDate;
+        _editDialogVisible = true;
+    }
+
+    private async Task CreateAsync()
+    {
+        if (_createForm != null)
+        {
+            await _createForm.Validate();
+            if (!_createForm.IsValid) return;
+        }
+
+        _newTodo.DueDate = _newTodoDueDate;
+        await TodoAppService.CreateAsync(_newTodo);
+        _createDialogVisible = false;
+        Snackbar.Add("Todo created successfully.", Severity.Success);
+        await LoadTodosAsync();
+    }
+
+    private async Task UpdateAsync()
+    {
+        if (_editForm != null)
+        {
+            await _editForm.Validate();
+            if (!_editForm.IsValid) return;
+        }
+
+        _editTodo.DueDate = _editTodoDueDate;
+        await TodoAppService.UpdateAsync(_editingTodoId, _editTodo);
+        _editDialogVisible = false;
+        Snackbar.Add("Todo updated successfully.", Severity.Success);
+        await LoadTodosAsync();
+    }
+
+    private async Task MarkAsDoneAsync(TodoDto todo)
+    {
+        var input = new CreateUpdateTodoDto
+        {
+            Title = todo.Title,
+            Description = todo.Description,
+            Status = TodoStatus.Done,
+            DueDate = todo.DueDate
+        };
+
+        await TodoAppService.UpdateAsync(todo.Id, input);
+        Snackbar.Add("Todo marked as done.", Severity.Success);
+        await LoadTodosAsync();
+    }
+
+    private async Task DeleteAsync(TodoDto todo)
+    {
+        var result = await DialogService.ShowMessageBox(
+            "Confirm Delete",
+            "Are you sure you want to delete this todo?",
+            yesText: "Delete",
+            cancelText: "Cancel");
+
+        if (result == true)
+        {
+            await TodoAppService.DeleteAsync(todo.Id);
+            Snackbar.Add("Todo deleted.", Severity.Info);
+            await LoadTodosAsync();
+        }
+    }
+}

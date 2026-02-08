@@ -1,0 +1,11 @@
+@using MudBlazor
+
+<MudNavMenu>
+    <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
+    <MudNavLink Href="/todos" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Checklist">Todos</MudNavLink>
+    <MudNavGroup Title="Administration" Icon="@Icons.Material.Filled.AdminPanelSettings" Expanded="false">
+        <MudNavLink Href="/identity/users" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.People">Users</MudNavLink>
+        <MudNavLink Href="/identity/roles" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Security">Roles</MudNavLink>
+        <MudNavLink Href="/setting-management" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Settings">Settings</MudNavLink>
+    </MudNavGroup>
+</MudNavMenu>

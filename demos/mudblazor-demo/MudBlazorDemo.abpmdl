@@ -1,0 +1,109 @@
+{
+  "template": "app",
+  "imports": {
+    "Volo.Abp.LeptonXLiteTheme": {
+      "version": "5.0.2",
+      "isInstalled": true,
+      "creationTime": "02/04/2026 19:25:04 +00:00"
+    },
+    "Volo.Abp.Account": {
+      "version": "10.0.2",
+      "isInstalled": true,
+      "creationTime": "02/04/2026 19:25:04 +00:00"
+    },
+    "Volo.Abp.OpenIddict": {
+      "version": "10.0.2",
+      "isInstalled": true,
+      "creationTime": "02/04/2026 19:25:04 +00:00"
+    },
+    "Volo.Abp.Identity": {
+      "version": "10.0.2",
+      "isInstalled": true,
+      "creationTime": "02/04/2026 19:25:04 +00:00"
+    },
+    "Volo.Abp.TenantManagement": {
+      "version": "10.0.2",
+      "isInstalled": true,
+      "creationTime": "02/04/2026 19:25:04 +00:00"
+    },
+    "Volo.Abp.SettingManagement": {
+      "version": "10.0.2",
+      "isInstalled": true,
+      "creationTime": "02/04/2026 19:25:04 +00:00"
+    },
+    "Volo.Abp.PermissionManagement": {
+      "version": "10.0.2",
+      "isInstalled": true,
+      "creationTime": "02/04/2026 19:25:04 +00:00"
+    },
+    "Volo.Abp.FeatureManagement": {
+      "version": "10.0.2",
+      "isInstalled": true,
+      "creationTime": "02/04/2026 19:25:04 +00:00"
+    }
+  },
+  "folders": {
+    "items": {
+      "src": {},
+      "test": {}
+    }
+  },
+  "packages": {
+    "LayeredDemo.Application": {
+      "path": "src/LayeredDemo.Application/LayeredDemo.Application.abppkg",
+      "folder": "src"
+    },
+    "LayeredDemo.Application.Tests": {
+      "path": "test/LayeredDemo.Application.Tests/LayeredDemo.Application.Tests.abppkg",
+      "folder": "test"
+    },
+    "LayeredDemo.Domain.Shared": {
+      "path": "src/LayeredDemo.Domain.Shared/LayeredDemo.Domain.Shared.abppkg",
+      "folder": "src"
+    },
+    "LayeredDemo.Application.Contracts": {
+      "path": "src/LayeredDemo.Application.Contracts/LayeredDemo.Application.Contracts.abppkg",
+      "folder": "src"
+    },
+    "LayeredDemo.HttpApi": {
+      "path": "src/LayeredDemo.HttpApi/LayeredDemo.HttpApi.abppkg",
+      "folder": "src"
+    },
+    "LayeredDemo.HttpApi.Client": {
+      "path": "src/LayeredDemo.HttpApi.Client/LayeredDemo.HttpApi.Client.abppkg",
+      "folder": "src"
+    },
+    "LayeredDemo.EntityFrameworkCore.Tests": {
+      "path": "test/LayeredDemo.EntityFrameworkCore.Tests/LayeredDemo.EntityFrameworkCore.Tests.abppkg",
+      "folder": "test"
+    },
+    "LayeredDemo.EntityFrameworkCore": {
+      "path": "src/LayeredDemo.EntityFrameworkCore/LayeredDemo.EntityFrameworkCore.abppkg",
+      "folder": "src"
+    },
+    "LayeredDemo.TestBase": {
+      "path": "test/LayeredDemo.TestBase/LayeredDemo.TestBase.abppkg",
+      "folder": "test"
+    },
+    "LayeredDemo.Domain.Tests": {
+      "path": "test/LayeredDemo.Domain.Tests/LayeredDemo.Domain.Tests.abppkg",
+      "folder": "test"
+    },
+    "LayeredDemo.HttpApi.Client.ConsoleTestApp": {
+      "path": "test/LayeredDemo.HttpApi.Client.ConsoleTestApp/LayeredDemo.HttpApi.Client.ConsoleTestApp.abppkg",
+      "folder": "test"
+    },
+    "LayeredDemo.DbMigrator": {
+      "path": "src/LayeredDemo.DbMigrator/LayeredDemo.DbMigrator.abppkg",
+      "folder": "src"
+    },
+    "LayeredDemo.Blazor": {
+      "path": "src/LayeredDemo.Blazor/LayeredDemo.Blazor.abppkg",
+      "folder": "src"
+    },
+    "LayeredDemo.Domain": {
+      "path": "src/LayeredDemo.Domain/LayeredDemo.Domain.abppkg",
+      "folder": "src"
+    }
+  }
+}
