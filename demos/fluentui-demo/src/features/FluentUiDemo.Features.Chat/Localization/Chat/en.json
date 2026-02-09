@@ -1,0 +1,18 @@
+{
+  "Culture": "en",
+  "Texts": {
+    "Menu:Chat": "Chat",
+    "Chat": "Chat",
+    "Chat:Title": "Live Chat",
+    "Chat:Send": "Send",
+    "Chat:TypeMessage": "Type a message...",
+    "Chat:OnlineUsers": "Online Users",
+    "Chat:Connecting": "Connecting to chat...",
+    "Chat:Connected": "Connected",
+    "Chat:Disconnected": "Disconnected",
+    "Chat:Reconnecting": "Reconnecting...",
+    "Chat:UserJoined": "{0} joined the chat",
+    "Chat:UserLeft": "{0} left the chat",
+    "Chat:NoMessages": "No messages yet. Start the conversation!"
+  }
+}

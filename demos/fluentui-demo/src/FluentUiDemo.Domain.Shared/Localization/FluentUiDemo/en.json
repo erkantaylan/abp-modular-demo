@@ -8,6 +8,7 @@
     "Menu:Roles": "Roles",
     "Menu:Settings": "Settings",
     "Menu:Todos": "Todos",
+    "Menu:Chat": "Chat",
     "LongWelcomeMessage": "Welcome to the application. This is a startup project based on the ABP framework. For more information visit",
     "Welcome": "Welcome",
     "Login": "Login",

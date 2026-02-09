@@ -1,0 +1,151 @@
+@page "/chat"
+@attribute [Authorize]
+@using Microsoft.FluentUI.AspNetCore.Components
+@using Icons = Microsoft.FluentUI.AspNetCore.Components.Icons
+@using Microsoft.Extensions.Localization
+@using Microsoft.AspNetCore.Components.Authorization
+@using FluentUiDemo.Services
+@inject IStringLocalizer<ChatResource> L
+@inject ChatService ChatService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@implements IDisposable
+
+<div class="columns" style="height: calc(100vh - 130px);">
+    @* Main chat area *@
+    <div class="column" style="display: flex; flex-direction: column; height: 100%;">
+        <FluentCard Style="flex: 1; display: flex; flex-direction: column; overflow: hidden;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <FluentLabel Typo="Typography.H5">@L["Chat:Title"]</FluentLabel>
+                <FluentBadge Appearance="Appearance.Accent">@L["Chat:Connected"]</FluentBadge>
+            </div>
+
+            @* Message list *@
+            <div @ref="_messageContainer" style="flex: 1; overflow-y: auto; padding: 8px; margin-bottom: 8px; border: 1px solid var(--neutral-stroke-divider-rest); border-radius: 4px;">
+                @if (_messages.Count == 0)
+                {
+                    <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: var(--neutral-foreground-hint);">
+                        <FluentLabel>@L["Chat:NoMessages"]</FluentLabel>
+                    </div>
+                }
+                else
+                {
+                    @foreach (var msg in _messages)
+                    {
+                        <div style="margin-bottom: 12px; display: flex; gap: 12px; align-items: flex-start;">
+                            <FluentPersona Name="@msg.User"
+                                           ImageSize="32px"
+                                           Style="flex-shrink: 0;" />
+                            <div style="flex: 1; min-width: 0;">
+                                <div style="display: flex; align-items: baseline; gap: 8px;">
+                                    <FluentLabel Weight="FontWeight.Bold">@msg.User</FluentLabel>
+                                    <FluentLabel Typo="Typography.Body" Style="color: var(--neutral-foreground-hint); font-size: 12px;">
+                                        @msg.Timestamp.ToLocalTime().ToString("HH:mm")
+                                    </FluentLabel>
+                                </div>
+                                <FluentLabel Style="word-break: break-word;">@msg.Message</FluentLabel>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+
+            @* Input area *@
+            <div style="display: flex; gap: 8px; align-items: flex-end;">
+                <FluentTextField @bind-Value="_messageInput"
+                                 Placeholder="@L["Chat:TypeMessage"]"
+                                 Style="flex: 1;"
+                                 @onkeydown="HandleKeyDown" />
+                <FluentButton Appearance="Appearance.Accent"
+                              OnClick="SendMessage"
+                              Disabled="@(string.IsNullOrWhiteSpace(_messageInput))"
+                              IconStart="@(new Icons.Regular.Size20.Send())">
+                    @L["Chat:Send"]
+                </FluentButton>
+            </div>
+        </FluentCard>
+    </div>
+
+    @* Online users sidebar *@
+    <div class="column is-3" style="height: 100%;">
+        <FluentCard Style="height: 100%; overflow-y: auto;">
+            <FluentLabel Typo="Typography.H6" Style="margin-bottom: 12px;">
+                @L["Chat:OnlineUsers"] (@_onlineUsers.Count)
+            </FluentLabel>
+            @foreach (var user in _onlineUsers)
+            {
+                <div style="margin-bottom: 8px;">
+                    <FluentPersona Name="@user"
+                                   ImageSize="28px" />
+                </div>
+            }
+        </FluentCard>
+    </div>
+</div>
+
+@code {
+    private List<ChatMessage> _messages = new();
+    private List<string> _onlineUsers = new();
+    private string _messageInput = string.Empty;
+    private ElementReference _messageContainer;
+    private string _currentUser = string.Empty;
+    private string _connectionId = Guid.NewGuid().ToString();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        _currentUser = authState.User.Identity?.Name ?? "Anonymous";
+
+        // Load existing data
+        _messages = ChatService.GetMessageHistory();
+        _onlineUsers = ChatService.GetOnlineUsers();
+
+        // Register this user as online
+        ChatService.AddUser(_connectionId, _currentUser);
+
+        // Subscribe to events
+        ChatService.MessageReceived += OnMessageReceived;
+        ChatService.OnlineUsersChanged += OnOnlineUsersChanged;
+    }
+
+    private void OnMessageReceived(ChatMessage message)
+    {
+        InvokeAsync(() =>
+        {
+            _messages = ChatService.GetMessageHistory();
+            StateHasChanged();
+        });
+    }
+
+    private void OnOnlineUsersChanged(List<string> users)
+    {
+        InvokeAsync(() =>
+        {
+            _onlineUsers = users;
+            StateHasChanged();
+        });
+    }
+
+    private void SendMessage()
+    {
+        if (!string.IsNullOrWhiteSpace(_messageInput))
+        {
+            ChatService.SendMessage(_currentUser, _messageInput);
+            _messageInput = string.Empty;
+        }
+    }
+
+    private void HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter" && !e.ShiftKey)
+        {
+            SendMessage();
+        }
+    }
+
+    public void Dispose()
+    {
+        ChatService.MessageReceived -= OnMessageReceived;
+        ChatService.OnlineUsersChanged -= OnOnlineUsersChanged;
+        ChatService.RemoveUser(_connectionId);
+    }
+}

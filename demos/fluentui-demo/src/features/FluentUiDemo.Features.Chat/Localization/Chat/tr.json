@@ -1,0 +1,18 @@
+{
+  "Culture": "tr",
+  "Texts": {
+    "Menu:Chat": "Sohbet",
+    "Chat": "Sohbet",
+    "Chat:Title": "Canlı Sohbet",
+    "Chat:Send": "Gönder",
+    "Chat:TypeMessage": "Bir mesaj yazın...",
+    "Chat:OnlineUsers": "Çevrimiçi Kullanıcılar",
+    "Chat:Connecting": "Sohbete bağlanılıyor...",
+    "Chat:Connected": "Bağlandı",
+    "Chat:Disconnected": "Bağlantı kesildi",
+    "Chat:Reconnecting": "Yeniden bağlanılıyor...",
+    "Chat:UserJoined": "{0} sohbete katıldı",
+    "Chat:UserLeft": "{0} sohbetten ayrıldı",
+    "Chat:NoMessages": "Henüz mesaj yok. Sohbeti başlatın!"
+  }
+}

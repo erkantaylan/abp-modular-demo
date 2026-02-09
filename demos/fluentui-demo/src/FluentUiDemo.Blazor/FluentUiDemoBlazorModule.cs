@@ -60,6 +60,7 @@ namespace FluentUiDemo.Blazor;
     typeof(FluentUiDemoEntityFrameworkCoreModule),
     typeof(FluentUiDemoHttpApiModule),
     typeof(TodoFeatureModule),
+    typeof(ChatFeatureModule),
     typeof(AbpAutofacModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpIdentityBlazorServerModule),

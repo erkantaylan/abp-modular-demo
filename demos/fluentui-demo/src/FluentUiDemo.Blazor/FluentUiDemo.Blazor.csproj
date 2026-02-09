@@ -33,6 +33,7 @@
     <ProjectReference Include="..\FluentUiDemo.EntityFrameworkCore\FluentUiDemo.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\FluentUiDemo.ServiceDefaults\FluentUiDemo.ServiceDefaults.csproj" />
     <ProjectReference Include="..\features\FluentUiDemo.Features.Todo\FluentUiDemo.Features.Todo.csproj" />
+    <ProjectReference Include="..\features\FluentUiDemo.Features.Chat\FluentUiDemo.Features.Chat.csproj" />
     <PackageReference Include="Volo.Abp.Autofac" Version="10.0.2" />
     <PackageReference Include="Volo.Abp.Swashbuckle" Version="10.0.2" />
     <PackageReference Include="Volo.Abp.AspNetCore.Serilog" Version="10.0.2" />

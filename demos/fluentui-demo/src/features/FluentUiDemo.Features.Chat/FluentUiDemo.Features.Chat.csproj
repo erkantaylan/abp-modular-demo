@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <Import Project="..\..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <RootNamespace>FluentUiDemo</RootNamespace>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.AspNetCore.Components.Web" Version="10.0.2" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Components.Web.Theming" Version="10.0.2" />
+    <PackageReference Include="Volo.Abp.AspNetCore.SignalR" Version="10.0.2" />
+    <PackageReference Include="Volo.Abp.UI.Navigation" Version="10.0.2" />
+    <PackageReference Include="Volo.Abp.Authorization" Version="10.0.2" />
+    <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components" Version="4.13.2" />
+    <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components.Icons" Version="4.13.2" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="10.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Localization\Chat\*.json" />
+    <Content Remove="Localization\Chat\*.json" />
+  </ItemGroup>
+
+</Project>
