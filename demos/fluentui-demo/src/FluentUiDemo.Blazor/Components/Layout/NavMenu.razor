@@ -1,9 +1,10 @@
+@inherits FluentUiDemo.Blazor.FluentUiDemoComponentBase
 @using Microsoft.FluentUI.AspNetCore.Components
 
-<FluentNavLink Href="/" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.Home())">Home</FluentNavLink>
-<FluentNavLink Href="/todos" Match="NavLinkMatch.Prefix" Icon="@(new Icons.Regular.Size20.TaskListSquareLtr())">Todos</FluentNavLink>
-<FluentNavGroup Title="Administration" Icon="@(new Icons.Regular.Size20.ShieldTask())" Expanded="false">
-    <FluentNavLink Href="/identity/users" Match="NavLinkMatch.Prefix" Icon="@(new Icons.Regular.Size20.People())">Users</FluentNavLink>
-    <FluentNavLink Href="/identity/roles" Match="NavLinkMatch.Prefix" Icon="@(new Icons.Regular.Size20.Shield())">Roles</FluentNavLink>
-    <FluentNavLink Href="/setting-management" Match="NavLinkMatch.Prefix" Icon="@(new Icons.Regular.Size20.Settings())">Settings</FluentNavLink>
+<FluentNavLink Href="/" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.Home())">@L["Menu:Home"]</FluentNavLink>
+<FluentNavLink Href="/todos" Match="NavLinkMatch.Prefix" Icon="@(new Icons.Regular.Size20.TaskListSquareLtr())">@L["Menu:Todos"]</FluentNavLink>
+<FluentNavGroup Title="@L["Menu:Administration"]" Icon="@(new Icons.Regular.Size20.ShieldTask())" Expanded="false">
+    <FluentNavLink Href="/identity/users" Match="NavLinkMatch.Prefix" Icon="@(new Icons.Regular.Size20.People())">@L["Menu:Users"]</FluentNavLink>
+    <FluentNavLink Href="/identity/roles" Match="NavLinkMatch.Prefix" Icon="@(new Icons.Regular.Size20.Shield())">@L["Menu:Roles"]</FluentNavLink>
+    <FluentNavLink Href="/setting-management" Match="NavLinkMatch.Prefix" Icon="@(new Icons.Regular.Size20.Settings())">@L["Menu:Settings"]</FluentNavLink>
 </FluentNavGroup>

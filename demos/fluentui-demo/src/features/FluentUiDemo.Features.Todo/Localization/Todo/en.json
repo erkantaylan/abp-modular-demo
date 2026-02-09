@@ -20,6 +20,17 @@
     "Permission:Todos": "Todo Management",
     "Permission:Todos.Create": "Create",
     "Permission:Todos.Edit": "Edit",
-    "Permission:Todos.Delete": "Delete"
+    "Permission:Todos.Delete": "Delete",
+    "TodoCreated": "Todo created successfully.",
+    "TodoUpdated": "Todo updated successfully.",
+    "TodoMarkedAsDone": "Todo marked as done.",
+    "TodoDeleted": "Todo deleted.",
+    "Save": "Save",
+    "Cancel": "Cancel",
+    "Delete": "Delete",
+    "Edit": "Edit",
+    "Confirm": "Confirm",
+    "Actions": "Actions",
+    "NoData": "No todos found."
   }
 }

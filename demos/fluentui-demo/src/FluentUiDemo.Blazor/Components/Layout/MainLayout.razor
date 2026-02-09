@@ -1,8 +1,15 @@
 @inherits LayoutComponentBase
 @using Microsoft.FluentUI.AspNetCore.Components
 @using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.Extensions.Localization
+@using Microsoft.Extensions.Options
+@using System.Globalization
+@using FluentUiDemo.Localization
+@using Volo.Abp.Localization
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
+@inject IOptions<AbpLocalizationOptions> LocalizationOptions
+@inject IStringLocalizer<FluentUiDemoResource> L
 
 <FluentToastProvider />
 <FluentDialogProvider />
@@ -14,8 +21,15 @@
                      VerticalAlignment="VerticalAlignment.Center" Style="width: 100%;">
             <FluentButton Appearance="Appearance.Stealth" OnClick="@ToggleNavMenu"
                           IconStart="@(new Icons.Regular.Size24.Navigation())" />
-            <FluentLabel Typo="Typography.H5" Style="margin-left: 12px; color: white;">FluentUI Demo</FluentLabel>
+            <FluentLabel Typo="Typography.H5" Style="margin-left: 12px; color: white;">@L["AppName"]</FluentLabel>
             <FluentSpacer />
+            <FluentSelect TOption="LanguageInfo"
+                          Items="@_languages"
+                          SelectedOption="@_selectedLanguage"
+                          SelectedOptionChanged="@OnLanguageChanged"
+                          OptionText="@(l => l.DisplayName)"
+                          Width="140px"
+                          Style="min-width: 140px; --neutral-fill-input-rest: rgba(255,255,255,0.1); color: white;" />
             <AuthorizeView>
                 <Authorized>
                     <FluentLabel Style="color: white; margin-right: 8px;">@context.User.Identity?.Name</FluentLabel>
@@ -24,7 +38,7 @@
                     </FluentAnchor>
                 </Authorized>
                 <NotAuthorized>
-                    <FluentAnchor Href="/Account/Login" Appearance="Appearance.Accent">Login</FluentAnchor>
+                    <FluentAnchor Href="/Account/Login" Appearance="Appearance.Accent">@L["Login"]</FluentAnchor>
                 </NotAuthorized>
             </AuthorizeView>
         </FluentStack>
@@ -45,9 +59,34 @@
 
 @code {
     private bool _navMenuExpanded = true;
+    private List<LanguageInfo> _languages = new();
+    private LanguageInfo? _selectedLanguage;
+
+    protected override void OnInitialized()
+    {
+        _languages = LocalizationOptions.Value.Languages.ToList();
+        _selectedLanguage = _languages.FirstOrDefault(l => l.CultureName == CultureInfo.CurrentCulture.Name)
+                            ?? _languages.FirstOrDefault();
+    }
 
     private void ToggleNavMenu()
     {
         _navMenuExpanded = !_navMenuExpanded;
     }
+
+    private void OnLanguageChanged(LanguageInfo? language)
+    {
+        if (language == null || language.CultureName == CultureInfo.CurrentCulture.Name)
+            return;
+
+        _selectedLanguage = language;
+        var uri = new Uri(NavigationManager.Uri)
+            .GetComponents(UriComponents.PathAndQuery, UriFormat.Unescaped);
+        var cultureEscaped = Uri.EscapeDataString(language.CultureName);
+        var uriEscaped = Uri.EscapeDataString(uri);
+        NavigationManager.NavigateTo(
+            $"/culture/switch?culture={cultureEscaped}&returnUrl={uriEscaped}",
+            forceLoad: true);
+    }
+
 }

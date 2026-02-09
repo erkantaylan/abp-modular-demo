@@ -325,6 +325,7 @@ public class FluentUiDemoBlazorModule : AbpModule
         app.UseAbpSerilogEnrichers();
         app.UseConfiguredEndpoints(builder =>
         {
+            builder.MapCultureSwitch();
             builder.MapRazorComponents<App>()
                 .AddInteractiveServerRenderMode()
                 .AddAdditionalAssemblies(builder.ServiceProvider.GetRequiredService<IOptions<AbpRouterOptions>>().Value.AdditionalAssemblies.ToArray());

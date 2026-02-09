@@ -5,16 +5,18 @@
 @using FluentUiDemo.Application
 @using FluentUiDemo.Domain
 @using FluentUiDemo.Permissions
+@using Microsoft.Extensions.Localization
 @using Volo.Abp.Application.Dtos
 @inject ITodoAppService TodoAppService
 @inject IDialogService DialogService
 @inject IToastService ToastService
+@inject IStringLocalizer<TodoResource> L
 
 <FluentCard>
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-        <FluentLabel Typo="Typography.H5">Todos</FluentLabel>
+        <FluentLabel Typo="Typography.H5">@L["Todos"]</FluentLabel>
         <FluentButton Appearance="Appearance.Accent" OnClick="OpenCreateDialog"
-                      IconStart="@(new Icons.Regular.Size20.Add())">New Todo</FluentButton>
+                      IconStart="@(new Icons.Regular.Size20.Add())">@L["NewTodo"]</FluentButton>
     </div>
 
     @if (_loading)
@@ -23,13 +25,13 @@
     }
     else if (_todos.Count == 0)
     {
-        <FluentLabel>No todos found.</FluentLabel>
+        <FluentLabel>@L["NoData"]</FluentLabel>
     }
     else
     {
         <FluentDataGrid Items="@_todos.AsQueryable()" TGridItem="TodoDto" Style="width: 100%;">
-            <PropertyColumn Property="@(t => t.Title)" Title="Title" />
-            <TemplateColumn Title="Status">
+            <PropertyColumn Property="@(t => t.Title)" Title="@L["Title"]" />
+            <TemplateColumn Title="@L["Status"]">
                 @{
                     var appearance = context.Status switch
                     {
@@ -37,32 +39,26 @@
                         TodoStatus.InProgress => Appearance.Neutral,
                         _ => Appearance.Outline
                     };
-                    var statusText = context.Status switch
-                    {
-                        TodoStatus.Done => "Done",
-                        TodoStatus.InProgress => "In Progress",
-                        _ => "Not Started"
-                    };
                 }
-                <FluentBadge Appearance="@appearance">@statusText</FluentBadge>
+                <FluentBadge Appearance="@appearance">@L[$"Enum:TodoStatus.{context.Status}"]</FluentBadge>
             </TemplateColumn>
-            <PropertyColumn Property="@(t => t.CreatorUserName)" Title="Created By" />
-            <TemplateColumn Title="Due Date">
+            <PropertyColumn Property="@(t => t.CreatorUserName)" Title="@L["CreatedBy"]" />
+            <TemplateColumn Title="@L["DueDate"]">
                 @context.DueDate?.ToString("yyyy-MM-dd")
             </TemplateColumn>
-            <TemplateColumn Title="Created">
+            <TemplateColumn Title="@L["CreationTime"]">
                 @context.CreationTime.ToString("g")
             </TemplateColumn>
-            <TemplateColumn Title="Actions">
+            <TemplateColumn Title="@L["Actions"]">
                 <FluentButton Appearance="Appearance.Stealth" OnClick="@(() => OpenEditDialog(context))"
-                              IconStart="@(new Icons.Regular.Size16.Edit())" Title="Edit" />
+                              IconStart="@(new Icons.Regular.Size16.Edit())" Title="@L["Edit"]" />
                 @if (context.Status != TodoStatus.Done)
                 {
                     <FluentButton Appearance="Appearance.Stealth" OnClick="@(() => MarkAsDoneAsync(context))"
-                                  IconStart="@(new Icons.Regular.Size16.CheckmarkCircle())" Title="Mark as Done" />
+                                  IconStart="@(new Icons.Regular.Size16.CheckmarkCircle())" Title="@L["MarkAsDone"]" />
                 }
                 <FluentButton Appearance="Appearance.Stealth" OnClick="@(() => DeleteAsync(context))"
-                              IconStart="@(new Icons.Regular.Size16.Delete())" Title="Delete" />
+                              IconStart="@(new Icons.Regular.Size16.Delete())" Title="@L["Delete"]" />
             </TemplateColumn>
         </FluentDataGrid>
     }
@@ -74,27 +70,27 @@
     <FluentDialog @bind-Hidden="@_createDialogHidden" Modal="true" TrapFocus="true"
                   PreventDismissOnOverlayClick="false" @ondialogdismiss="CloseCreateDialog">
         <FluentDialogHeader>
-            <FluentLabel Typo="Typography.H6">New Todo</FluentLabel>
+            <FluentLabel Typo="Typography.H6">@L["NewTodo"]</FluentLabel>
         </FluentDialogHeader>
         <FluentDialogBody>
             <EditForm Model="_newTodo">
                 <DataAnnotationsValidator />
                 <FluentStack Orientation="Orientation.Vertical">
-                    <FluentTextField @bind-Value="_newTodo.Title" Label="Title" Required="true"
+                    <FluentTextField @bind-Value="_newTodo.Title" Label="@L["Title"]" Required="true"
                                      Maxlength="256" Style="width: 100%;" />
-                    <FluentTextArea @bind-Value="_newTodo.Description" Label="Description"
+                    <FluentTextArea @bind-Value="_newTodo.Description" Label="@L["Description"]"
                                     Maxlength="1024" Rows="3" Style="width: 100%;" />
-                    <FluentSelect TOption="TodoStatus" @bind-SelectedOption="_newTodo.Status" Label="Status"
+                    <FluentSelect TOption="TodoStatus" @bind-SelectedOption="_newTodo.Status" Label="@L["Status"]"
                                   Items="@(Enum.GetValues<TodoStatus>())"
-                                  OptionText="@(s => GetStatusText(s))"
+                                  OptionText="@(s => L[$"Enum:TodoStatus.{s}"])"
                                   Style="width: 100%;" />
-                    <FluentDatePicker @bind-Value="_newTodoDueDate" Label="Due Date" />
+                    <FluentDatePicker @bind-Value="_newTodoDueDate" Label="@L["DueDate"]" />
                 </FluentStack>
             </EditForm>
         </FluentDialogBody>
         <FluentDialogFooter>
-            <FluentButton Appearance="Appearance.Neutral" OnClick="CloseCreateDialog">Cancel</FluentButton>
-            <FluentButton Appearance="Appearance.Accent" OnClick="CreateAsync">Save</FluentButton>
+            <FluentButton Appearance="Appearance.Neutral" OnClick="CloseCreateDialog">@L["Cancel"]</FluentButton>
+            <FluentButton Appearance="Appearance.Accent" OnClick="CreateAsync">@L["Save"]</FluentButton>
         </FluentDialogFooter>
     </FluentDialog>
 }
@@ -105,27 +101,27 @@
     <FluentDialog @bind-Hidden="@_editDialogHidden" Modal="true" TrapFocus="true"
                   PreventDismissOnOverlayClick="false" @ondialogdismiss="CloseEditDialog">
         <FluentDialogHeader>
-            <FluentLabel Typo="Typography.H6">Edit Todo</FluentLabel>
+            <FluentLabel Typo="Typography.H6">@L["EditTodo"]</FluentLabel>
         </FluentDialogHeader>
         <FluentDialogBody>
             <EditForm Model="_editTodo">
                 <DataAnnotationsValidator />
                 <FluentStack Orientation="Orientation.Vertical">
-                    <FluentTextField @bind-Value="_editTodo.Title" Label="Title" Required="true"
+                    <FluentTextField @bind-Value="_editTodo.Title" Label="@L["Title"]" Required="true"
                                      Maxlength="256" Style="width: 100%;" />
-                    <FluentTextArea @bind-Value="_editTodo.Description" Label="Description"
+                    <FluentTextArea @bind-Value="_editTodo.Description" Label="@L["Description"]"
                                     Maxlength="1024" Rows="3" Style="width: 100%;" />
-                    <FluentSelect TOption="TodoStatus" @bind-SelectedOption="_editTodo.Status" Label="Status"
+                    <FluentSelect TOption="TodoStatus" @bind-SelectedOption="_editTodo.Status" Label="@L["Status"]"
                                   Items="@(Enum.GetValues<TodoStatus>())"
-                                  OptionText="@(s => GetStatusText(s))"
+                                  OptionText="@(s => L[$"Enum:TodoStatus.{s}"])"
                                   Style="width: 100%;" />
-                    <FluentDatePicker @bind-Value="_editTodoDueDate" Label="Due Date" />
+                    <FluentDatePicker @bind-Value="_editTodoDueDate" Label="@L["DueDate"]" />
                 </FluentStack>
             </EditForm>
         </FluentDialogBody>
         <FluentDialogFooter>
-            <FluentButton Appearance="Appearance.Neutral" OnClick="CloseEditDialog">Cancel</FluentButton>
-            <FluentButton Appearance="Appearance.Accent" OnClick="UpdateAsync">Save</FluentButton>
+            <FluentButton Appearance="Appearance.Neutral" OnClick="CloseEditDialog">@L["Cancel"]</FluentButton>
+            <FluentButton Appearance="Appearance.Accent" OnClick="UpdateAsync">@L["Save"]</FluentButton>
         </FluentDialogFooter>
     </FluentDialog>
 }
@@ -210,7 +206,7 @@
         _newTodo.DueDate = _newTodoDueDate;
         await TodoAppService.CreateAsync(_newTodo);
         CloseCreateDialog();
-        ToastService.ShowSuccess("Todo created successfully.");
+        ToastService.ShowSuccess(L["TodoCreated"]);
         await LoadTodosAsync();
     }
 
@@ -222,7 +218,7 @@
         _editTodo.DueDate = _editTodoDueDate;
         await TodoAppService.UpdateAsync(_editingTodoId, _editTodo);
         CloseEditDialog();
-        ToastService.ShowSuccess("Todo updated successfully.");
+        ToastService.ShowSuccess(L["TodoUpdated"]);
         await LoadTodosAsync();
     }
 
@@ -237,30 +233,23 @@
         };
 
         await TodoAppService.UpdateAsync(todo.Id, input);
-        ToastService.ShowSuccess("Todo marked as done.");
+        ToastService.ShowSuccess(L["TodoMarkedAsDone"]);
         await LoadTodosAsync();
     }
-
-    private static string GetStatusText(TodoStatus status) => status switch
-    {
-        TodoStatus.Done => "Done",
-        TodoStatus.InProgress => "In Progress",
-        _ => "Not Started"
-    };
 
     private async Task DeleteAsync(TodoDto todo)
     {
         var dialog = await DialogService.ShowConfirmationAsync(
-            "Are you sure you want to delete this todo?",
-            "Delete",
-            "Cancel",
-            "Confirm Delete");
+            L["TodoDeletionConfirmation"],
+            L["Delete"],
+            L["Cancel"],
+            L["Confirm"]);
 
         var result = await dialog.Result;
         if (!result.Cancelled)
         {
             await TodoAppService.DeleteAsync(todo.Id);
-            ToastService.ShowInfo("Todo deleted.");
+            ToastService.ShowInfo(L["TodoDeleted"]);
             await LoadTodosAsync();
         }
     }
