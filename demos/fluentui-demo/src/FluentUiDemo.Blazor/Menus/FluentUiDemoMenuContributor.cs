@@ -33,6 +33,17 @@ public class FluentUiDemoMenuContributor : IMenuContributor
             )
         );
 
+        context.Menu.Items.Insert(
+            1,
+            new ApplicationMenuItem(
+                FluentUiDemoMenus.Dashboard,
+                l["Menu:Dashboard"],
+                "/dashboard",
+                icon: "fas fa-chart-line",
+                order: 2
+            )
+        );
+
         var administration = context.Menu.GetAdministration();
         administration.Order = 6;
 

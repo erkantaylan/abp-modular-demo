@@ -36,6 +36,23 @@
     "No": "No",
     "Confirm": "Confirm",
     "Loading": "Loading...",
-    "NoData": "No data found."
+    "NoData": "No data found.",
+    "Menu:Dashboard": "Dashboard",
+    "Dashboard": "Dashboard",
+    "Dashboard:TotalTodos": "Total Todos",
+    "Dashboard:CompletedTodos": "Completed",
+    "Dashboard:InProgressTodos": "In Progress",
+    "Dashboard:NotStartedTodos": "Not Started",
+    "Dashboard:ActiveUsers": "Active Users",
+    "Dashboard:RecentActivity": "Recent Activity",
+    "Dashboard:RecentTodos": "Recent Todos",
+    "Dashboard:TodosByStatus": "Todos by Status",
+    "Dashboard:QuickStats": "Quick Stats",
+    "Dashboard:CompletionRate": "Completion Rate",
+    "Dashboard:OverdueTodos": "Overdue",
+    "Dashboard:NoDueDateSet": "No due date",
+    "Dashboard:NoRecentActivity": "No recent activity yet.",
+    "Dashboard:CreatedBy": "by {0}",
+    "Dashboard:StatusOverview": "Status Overview"
   }
 }

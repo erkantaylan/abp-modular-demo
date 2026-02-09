@@ -1,0 +1,242 @@
+@page "/dashboard"
+@attribute [Authorize]
+@inherits FluentUiDemoComponentBase
+@using Microsoft.FluentUI.AspNetCore.Components
+@using Icons = Microsoft.FluentUI.AspNetCore.Components.Icons
+@using FluentUiDemo.Application
+@using FluentUiDemo.Domain
+@using Volo.Abp.Application.Dtos
+@inject ITodoAppService TodoAppService
+
+<FluentLabel Typo="Typography.H4" Style="margin-bottom: 16px;">@L["Dashboard"]</FluentLabel>
+
+@if (_loading)
+{
+    <FluentProgress />
+}
+else
+{
+    @* Quick Stats Cards *@
+    <FluentGrid Spacing="3" Justify="JustifyContent.FlexStart">
+        <FluentGridItem xs="6" md="3">
+            <FluentCard Style="text-align: center; padding: 24px;">
+                <FluentIcon Value="@(new Icons.Regular.Size20.TaskListSquareLtr())" Color="Color.Accent" Style="font-size: 28px;" />
+                <FluentLabel Typo="Typography.H3" Style="margin-top: 8px; color: var(--accent-fill-rest);">@_totalCount</FluentLabel>
+                <FluentLabel Typo="Typography.Body" Style="color: var(--neutral-foreground-hint);">@L["Dashboard:TotalTodos"]</FluentLabel>
+            </FluentCard>
+        </FluentGridItem>
+        <FluentGridItem xs="6" md="3">
+            <FluentCard Style="text-align: center; padding: 24px;">
+                <FluentIcon Value="@(new Icons.Regular.Size20.CheckmarkCircle())" Color="Color.Success" Style="font-size: 28px;" />
+                <FluentLabel Typo="Typography.H3" Style="margin-top: 8px; color: var(--success);">@_completedCount</FluentLabel>
+                <FluentLabel Typo="Typography.Body" Style="color: var(--neutral-foreground-hint);">@L["Dashboard:CompletedTodos"]</FluentLabel>
+            </FluentCard>
+        </FluentGridItem>
+        <FluentGridItem xs="6" md="3">
+            <FluentCard Style="text-align: center; padding: 24px;">
+                <FluentIcon Value="@(new Icons.Regular.Size20.ArrowSync())" Color="Color.Neutral" Style="font-size: 28px;" />
+                <FluentLabel Typo="Typography.H3" Style="margin-top: 8px;">@_inProgressCount</FluentLabel>
+                <FluentLabel Typo="Typography.Body" Style="color: var(--neutral-foreground-hint);">@L["Dashboard:InProgressTodos"]</FluentLabel>
+            </FluentCard>
+        </FluentGridItem>
+        <FluentGridItem xs="6" md="3">
+            <FluentCard Style="text-align: center; padding: 24px;">
+                <FluentIcon Value="@(new Icons.Regular.Size20.Circle())" Color="Color.Neutral" Style="font-size: 28px;" />
+                <FluentLabel Typo="Typography.H3" Style="margin-top: 8px;">@_notStartedCount</FluentLabel>
+                <FluentLabel Typo="Typography.Body" Style="color: var(--neutral-foreground-hint);">@L["Dashboard:NotStartedTodos"]</FluentLabel>
+            </FluentCard>
+        </FluentGridItem>
+    </FluentGrid>
+
+    @* Second Row: Completion Rate, Active Users, Overdue *@
+    <FluentGrid Spacing="3" Justify="JustifyContent.FlexStart" Style="margin-top: 16px;">
+        <FluentGridItem xs="12" md="4">
+            <FluentCard Style="padding: 24px;">
+                <FluentLabel Typo="Typography.H6" Style="margin-bottom: 12px;">@L["Dashboard:CompletionRate"]</FluentLabel>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <FluentProgress Min="0" Max="100" Value="@_completionRate" Style="flex: 1;" />
+                    <FluentLabel Typo="Typography.H5">@(_completionRate)%</FluentLabel>
+                </div>
+            </FluentCard>
+        </FluentGridItem>
+        <FluentGridItem xs="6" md="4">
+            <FluentCard Style="text-align: center; padding: 24px;">
+                <FluentIcon Value="@(new Icons.Regular.Size20.People())" Color="Color.Accent" Style="font-size: 28px;" />
+                <FluentLabel Typo="Typography.H3" Style="margin-top: 8px; color: var(--accent-fill-rest);">@_activeUserCount</FluentLabel>
+                <FluentLabel Typo="Typography.Body" Style="color: var(--neutral-foreground-hint);">@L["Dashboard:ActiveUsers"]</FluentLabel>
+            </FluentCard>
+        </FluentGridItem>
+        <FluentGridItem xs="6" md="4">
+            <FluentCard Style="text-align: center; padding: 24px;">
+                <FluentIcon Value="@(new Icons.Regular.Size20.Warning())" Color="Color.Error" Style="font-size: 28px;" />
+                <FluentLabel Typo="Typography.H3" Style="margin-top: 8px; color: var(--error);">@_overdueCount</FluentLabel>
+                <FluentLabel Typo="Typography.Body" Style="color: var(--neutral-foreground-hint);">@L["Dashboard:OverdueTodos"]</FluentLabel>
+            </FluentCard>
+        </FluentGridItem>
+    </FluentGrid>
+
+    @* Third Row: Status Overview + Recent Activity *@
+    <FluentGrid Spacing="3" Justify="JustifyContent.FlexStart" Style="margin-top: 16px;">
+        <FluentGridItem xs="12" md="5">
+            <FluentCard Style="padding: 24px; min-height: 300px;">
+                <FluentLabel Typo="Typography.H6" Style="margin-bottom: 16px;">@L["Dashboard:StatusOverview"]</FluentLabel>
+
+                @if (_totalCount > 0)
+                {
+                    <FluentStack Orientation="Orientation.Vertical" VerticalGap="12">
+                        @* Not Started bar *@
+                        <div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                                <FluentLabel>@L["Dashboard:NotStartedTodos"]</FluentLabel>
+                                <FluentLabel>@_notStartedCount</FluentLabel>
+                            </div>
+                            <div style="background: var(--neutral-stroke-rest); border-radius: 4px; height: 8px; overflow: hidden;">
+                                <div style="background: var(--neutral-foreground-hint); height: 100%; width: @(_notStartedPct)%; border-radius: 4px;"></div>
+                            </div>
+                        </div>
+
+                        @* In Progress bar *@
+                        <div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                                <FluentLabel>@L["Dashboard:InProgressTodos"]</FluentLabel>
+                                <FluentLabel>@_inProgressCount</FluentLabel>
+                            </div>
+                            <div style="background: var(--neutral-stroke-rest); border-radius: 4px; height: 8px; overflow: hidden;">
+                                <div style="background: var(--accent-fill-rest); height: 100%; width: @(_inProgressPct)%; border-radius: 4px;"></div>
+                            </div>
+                        </div>
+
+                        @* Done bar *@
+                        <div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                                <FluentLabel>@L["Dashboard:CompletedTodos"]</FluentLabel>
+                                <FluentLabel>@_completedCount</FluentLabel>
+                            </div>
+                            <div style="background: var(--neutral-stroke-rest); border-radius: 4px; height: 8px; overflow: hidden;">
+                                <div style="background: var(--success); height: 100%; width: @(_completedPct)%; border-radius: 4px;"></div>
+                            </div>
+                        </div>
+                    </FluentStack>
+                }
+                else
+                {
+                    <FluentLabel>@L["NoData"]</FluentLabel>
+                }
+            </FluentCard>
+        </FluentGridItem>
+
+        <FluentGridItem xs="12" md="7">
+            <FluentCard Style="padding: 24px; min-height: 300px;">
+                <FluentLabel Typo="Typography.H6" Style="margin-bottom: 16px;">@L["Dashboard:RecentActivity"]</FluentLabel>
+
+                @if (_recentTodos.Count > 0)
+                {
+                    <FluentStack Orientation="Orientation.Vertical" VerticalGap="8">
+                        @foreach (var todo in _recentTodos)
+                        {
+                            <div style="display: flex; align-items: center; gap: 12px; padding: 8px; border-radius: 4px; background: var(--neutral-layer-2);">
+                                @{
+                                    var statusIcon = todo.Status switch
+                                    {
+                                        TodoStatus.Done => (Icon)new Icons.Regular.Size16.CheckmarkCircle(),
+                                        TodoStatus.InProgress => new Icons.Regular.Size16.ArrowSync(),
+                                        _ => new Icons.Regular.Size16.Circle()
+                                    };
+                                    var statusColor = todo.Status switch
+                                    {
+                                        TodoStatus.Done => Color.Success,
+                                        TodoStatus.InProgress => Color.Accent,
+                                        _ => Color.Neutral
+                                    };
+                                }
+                                <FluentIcon Value="@statusIcon" Color="@statusColor" />
+                                <div style="flex: 1; min-width: 0;">
+                                    <FluentLabel Typo="Typography.Body" Style="font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                        @todo.Title
+                                    </FluentLabel>
+                                    <FluentLabel Typo="Typography.Body" Style="color: var(--neutral-foreground-hint); font-size: 12px;">
+                                        @(string.Format(L["Dashboard:CreatedBy"], todo.CreatorUserName ?? "—"))
+                                        &middot; @todo.CreationTime.ToString("g")
+                                    </FluentLabel>
+                                </div>
+                                <FluentBadge Appearance="@(todo.Status == TodoStatus.Done ? Appearance.Accent : (todo.Status == TodoStatus.InProgress ? Appearance.Neutral : Appearance.Outline))">
+                                    @L[$"Enum:TodoStatus.{todo.Status}"]
+                                </FluentBadge>
+                            </div>
+                        }
+                    </FluentStack>
+                }
+                else
+                {
+                    <FluentLabel>@L["Dashboard:NoRecentActivity"]</FluentLabel>
+                }
+            </FluentCard>
+        </FluentGridItem>
+    </FluentGrid>
+}
+
+@code {
+    private bool _loading = true;
+    private List<TodoDto> _todos = new();
+    private List<TodoDto> _recentTodos = new();
+
+    private int _totalCount;
+    private int _completedCount;
+    private int _inProgressCount;
+    private int _notStartedCount;
+    private int _activeUserCount;
+    private int _overdueCount;
+    private int _completionRate;
+    private int _notStartedPct;
+    private int _inProgressPct;
+    private int _completedPct;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _loading = true;
+        try
+        {
+            var result = await TodoAppService.GetListAsync(new TodoGetListInput
+            {
+                MaxResultCount = 1000,
+                SkipCount = 0
+            });
+
+            _todos = result.Items.ToList();
+            _totalCount = _todos.Count;
+            _completedCount = _todos.Count(t => t.Status == TodoStatus.Done);
+            _inProgressCount = _todos.Count(t => t.Status == TodoStatus.InProgress);
+            _notStartedCount = _todos.Count(t => t.Status == TodoStatus.NotStarted);
+            _activeUserCount = _todos
+                .Where(t => !string.IsNullOrEmpty(t.CreatorUserName))
+                .Select(t => t.CreatorUserName)
+                .Distinct()
+                .Count();
+            _overdueCount = _todos.Count(t =>
+                t.DueDate.HasValue &&
+                t.DueDate.Value < DateTime.Now &&
+                t.Status != TodoStatus.Done);
+            _completionRate = _totalCount > 0
+                ? (int)Math.Round(100.0 * _completedCount / _totalCount)
+                : 0;
+            _notStartedPct = _totalCount > 0
+                ? (int)Math.Round(100.0 * _notStartedCount / _totalCount)
+                : 0;
+            _inProgressPct = _totalCount > 0
+                ? (int)Math.Round(100.0 * _inProgressCount / _totalCount)
+                : 0;
+            _completedPct = _totalCount > 0
+                ? (int)Math.Round(100.0 * _completedCount / _totalCount)
+                : 0;
+
+            _recentTodos = _todos
+                .OrderByDescending(t => t.CreationTime)
+                .Take(5)
+                .ToList();
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+}

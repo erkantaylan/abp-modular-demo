@@ -36,6 +36,23 @@
     "No": "Hayır",
     "Confirm": "Onayla",
     "Loading": "Yükleniyor...",
-    "NoData": "Veri bulunamadı."
+    "NoData": "Veri bulunamadı.",
+    "Menu:Dashboard": "Gösterge Paneli",
+    "Dashboard": "Gösterge Paneli",
+    "Dashboard:TotalTodos": "Toplam Yapılacak",
+    "Dashboard:CompletedTodos": "Tamamlanan",
+    "Dashboard:InProgressTodos": "Devam Eden",
+    "Dashboard:NotStartedTodos": "Başlanmamış",
+    "Dashboard:ActiveUsers": "Aktif Kullanıcılar",
+    "Dashboard:RecentActivity": "Son Aktiviteler",
+    "Dashboard:RecentTodos": "Son Yapılacaklar",
+    "Dashboard:TodosByStatus": "Duruma Göre Yapılacaklar",
+    "Dashboard:QuickStats": "Hızlı İstatistikler",
+    "Dashboard:CompletionRate": "Tamamlanma Oranı",
+    "Dashboard:OverdueTodos": "Süresi Geçmiş",
+    "Dashboard:NoDueDateSet": "Bitiş tarihi yok",
+    "Dashboard:NoRecentActivity": "Henüz son aktivite yok.",
+    "Dashboard:CreatedBy": "{0} tarafından",
+    "Dashboard:StatusOverview": "Durum Genel Bakışı"
   }
 }

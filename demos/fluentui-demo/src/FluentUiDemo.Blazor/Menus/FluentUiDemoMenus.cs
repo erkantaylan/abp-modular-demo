@@ -4,4 +4,5 @@ public class FluentUiDemoMenus
 {
     private const string Prefix = "FluentUiDemo";
     public const string Home = Prefix + ".Home";
+    public const string Dashboard = Prefix + ".Dashboard";
 }
