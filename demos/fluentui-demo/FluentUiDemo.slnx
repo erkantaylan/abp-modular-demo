@@ -1,4 +1,8 @@
 <Solution>
+    <Folder Name="/0. Aspire/">
+        <Project Path="src/FluentUiDemo.AppHost/FluentUiDemo.AppHost.csproj" />
+        <Project Path="src/FluentUiDemo.ServiceDefaults/FluentUiDemo.ServiceDefaults.csproj" />
+    </Folder>
     <Folder Name="/1. Domain/">
         <Project Path="src/FluentUiDemo.Domain.Shared/FluentUiDemo.Domain.Shared.csproj" />
         <Project Path="src/FluentUiDemo.Domain/FluentUiDemo.Domain.csproj" />
@@ -18,8 +22,5 @@
     </Folder>
     <Folder Name="/5. Features/">
         <Project Path="src/features/FluentUiDemo.Features.Todo/FluentUiDemo.Features.Todo.csproj" />
-    </Folder>
-    <Folder Name="/6. Shared/">
-        <Project Path="src/FluentUiDemo.ServiceDefaults/FluentUiDemo.ServiceDefaults.csproj" />
     </Folder>
 </Solution>
