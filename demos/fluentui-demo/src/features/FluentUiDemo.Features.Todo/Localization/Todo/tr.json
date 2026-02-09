@@ -11,6 +11,8 @@
     "Status": "Durum",
     "DueDate": "Bitiş Tarihi",
     "CreatedBy": "Oluşturan",
+    "CompletedBy": "Tamamlayan",
+    "CompletionDate": "Tamamlanma Tarihi",
     "CreationTime": "Oluşturulma Zamanı",
     "MarkAsDone": "Tamamlandı Olarak İşaretle",
     "TodoDeletionConfirmation": "Bu yapılacak öğeyi silmek istediğinizden emin misiniz?",

@@ -14,5 +14,11 @@ public class TodoDto : FullAuditedEntityDto<Guid>
 
     public DateTime? DueDate { get; set; }
 
+    public Guid? CompleterId { get; set; }
+
+    public DateTime? CompletionTime { get; set; }
+
     public string? CreatorUserName { get; set; }
+
+    public string? CompleterUserName { get; set; }
 }

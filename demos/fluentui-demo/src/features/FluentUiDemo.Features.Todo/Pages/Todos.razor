@@ -43,6 +43,10 @@
                 <FluentBadge Appearance="@appearance">@L[$"Enum:TodoStatus.{context.Status}"]</FluentBadge>
             </TemplateColumn>
             <PropertyColumn Property="@(t => t.CreatorUserName)" Title="@L["CreatedBy"]" />
+            <PropertyColumn Property="@(t => t.CompleterUserName)" Title="@L["CompletedBy"]" />
+            <TemplateColumn Title="@L["CompletionDate"]">
+                @context.CompletionTime?.ToString("g")
+            </TemplateColumn>
             <TemplateColumn Title="@L["DueDate"]">
                 @context.DueDate?.ToString("yyyy-MM-dd")
             </TemplateColumn>

@@ -11,6 +11,8 @@
     "Status": "Status",
     "DueDate": "Due Date",
     "CreatedBy": "Created By",
+    "CompletedBy": "Completed By",
+    "CompletionDate": "Completion Date",
     "CreationTime": "Creation Time",
     "MarkAsDone": "Mark as Done",
     "TodoDeletionConfirmation": "Are you sure you want to delete this todo?",
