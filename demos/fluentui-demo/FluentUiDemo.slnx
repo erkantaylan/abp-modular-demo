@@ -23,5 +23,6 @@
     <Folder Name="/5. Features/">
         <Project Path="src/features/FluentUiDemo.Features.Todo/FluentUiDemo.Features.Todo.csproj" />
         <Project Path="src/features/FluentUiDemo.Features.Chat/FluentUiDemo.Features.Chat.csproj" />
+        <Project Path="src/features/FluentUiDemo.Features.Shopping/FluentUiDemo.Features.Shopping.csproj" />
     </Folder>
 </Solution>

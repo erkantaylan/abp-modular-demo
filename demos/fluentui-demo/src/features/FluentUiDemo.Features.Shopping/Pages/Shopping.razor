@@ -1,0 +1,247 @@
+@page "/shopping"
+@attribute [Authorize]
+@using Microsoft.FluentUI.AspNetCore.Components
+@using Icons = Microsoft.FluentUI.AspNetCore.Components.Icons
+@using FluentUiDemo.Application
+@using FluentUiDemo.Domain
+@using Microsoft.Extensions.Localization
+@using Volo.Abp.Application.Dtos
+@inject IProductAppService ProductAppService
+@inject IToastService ToastService
+@inject IStringLocalizer<ShoppingResource> L
+
+<div class="columns">
+    @* Products Section *@
+    <div class="column is-8">
+        <FluentCard>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <FluentLabel Typo="Typography.H5">@L["Products"]</FluentLabel>
+                <FluentSelect TOption="ProductCategory?"
+                              SelectedOption="_selectedCategory"
+                              SelectedOptionChanged="OnCategoryChanged"
+                              Items="@_categoryOptions"
+                              OptionText="@(c => c.HasValue ? L[$"Enum:ProductCategory.{c.Value}"] : L["AllCategories"])"
+                              Style="min-width: 180px;" />
+            </div>
+
+            @if (_loading)
+            {
+                <FluentProgress />
+            }
+            else if (_filteredProducts.Count == 0)
+            {
+                <FluentLabel>@L["NoProducts"]</FluentLabel>
+            }
+            else
+            {
+                <div class="columns is-multiline">
+                    @foreach (var product in _filteredProducts)
+                    {
+                        <div class="column is-6">
+                            <FluentCard Style="height: 100%;">
+                                <div style="display: flex; flex-direction: column; height: 100%; gap: 8px;">
+                                    <div style="background: var(--neutral-layer-3); border-radius: 4px; height: 120px; display: flex; align-items: center; justify-content: center;">
+                                        <FluentIcon Value="@(new Icons.Regular.Size48.Box())" Color="Color.Neutral" />
+                                    </div>
+                                    <FluentLabel Typo="Typography.H6">@product.Name</FluentLabel>
+                                    <FluentBadge Appearance="Appearance.Outline">
+                                        @L[$"Enum:ProductCategory.{product.Category}"]
+                                    </FluentBadge>
+                                    <FluentLabel Typo="Typography.Body" Style="flex: 1; color: var(--neutral-foreground-hint);">
+                                        @product.Description
+                                    </FluentLabel>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+                                        <FluentLabel Typo="Typography.H6" Style="color: var(--accent-fill-rest);">
+                                            @product.Price.ToString("C2")
+                                        </FluentLabel>
+                                        <FluentButton Appearance="Appearance.Accent"
+                                                      OnClick="@(() => AddToCart(product))"
+                                                      IconStart="@(new Icons.Regular.Size16.Add())">
+                                            @L["AddToCart"]
+                                        </FluentButton>
+                                    </div>
+                                </div>
+                            </FluentCard>
+                        </div>
+                    }
+                </div>
+            }
+        </FluentCard>
+    </div>
+
+    @* Cart Section *@
+    <div class="column is-4">
+        <FluentCard>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <FluentLabel Typo="Typography.H5">
+                    @L["Cart"]
+                    @if (_cartItems.Count > 0)
+                    {
+                        <FluentBadge Appearance="Appearance.Accent" Style="margin-left: 8px;">
+                            @_cartItems.Sum(c => c.Quantity)
+                        </FluentBadge>
+                    }
+                </FluentLabel>
+                @if (_cartItems.Count > 0)
+                {
+                    <FluentButton Appearance="Appearance.Stealth"
+                                  OnClick="ClearCart"
+                                  IconStart="@(new Icons.Regular.Size16.Delete())">
+                        @L["ClearCart"]
+                    </FluentButton>
+                }
+            </div>
+
+            @if (_cartItems.Count == 0)
+            {
+                <div style="text-align: center; padding: 32px 0; color: var(--neutral-foreground-hint);">
+                    <FluentIcon Value="@(new Icons.Regular.Size48.Box())" Color="Color.Neutral" />
+                    <FluentLabel Style="display: block; margin-top: 8px;">@L["CartEmpty"]</FluentLabel>
+                </div>
+            }
+            else
+            {
+                <FluentStack Orientation="Orientation.Vertical" Style="gap: 12px;">
+                    @foreach (var item in _cartItems)
+                    {
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px; border-bottom: 1px solid var(--neutral-stroke-rest);">
+                            <div style="flex: 1;">
+                                <FluentLabel Typo="Typography.Body" Weight="FontWeight.Bold">@item.ProductName</FluentLabel>
+                                <FluentLabel Typo="Typography.Body" Style="color: var(--neutral-foreground-hint);">
+                                    @item.UnitPrice.ToString("C2")
+                                </FluentLabel>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 4px;">
+                                <FluentButton Appearance="Appearance.Stealth" OnClick="@(() => DecreaseQuantity(item))"
+                                              IconStart="@(new Icons.Regular.Size16.Subtract())" />
+                                <FluentLabel Style="min-width: 24px; text-align: center;">@item.Quantity</FluentLabel>
+                                <FluentButton Appearance="Appearance.Stealth" OnClick="@(() => IncreaseQuantity(item))"
+                                              IconStart="@(new Icons.Regular.Size16.Add())" />
+                                <FluentButton Appearance="Appearance.Stealth" OnClick="@(() => RemoveFromCart(item))"
+                                              IconStart="@(new Icons.Regular.Size16.Delete())" Title="@L["RemoveFromCart"]" />
+                            </div>
+                        </div>
+                    }
+                </FluentStack>
+
+                <div style="margin-top: 16px; padding-top: 16px; border-top: 2px solid var(--neutral-stroke-rest);">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <FluentLabel Typo="Typography.H6">@L["CartTotal"]</FluentLabel>
+                        <FluentLabel Typo="Typography.H5" Style="color: var(--accent-fill-rest);">
+                            @_cartItems.Sum(c => c.TotalPrice).ToString("C2")
+                        </FluentLabel>
+                    </div>
+                </div>
+            }
+        </FluentCard>
+    </div>
+</div>
+
+@code {
+    private List<ProductDto> _products = new();
+    private List<ProductDto> _filteredProducts = new();
+    private List<CartItem> _cartItems = new();
+    private bool _loading = true;
+    private ProductCategory? _selectedCategory;
+    private ProductCategory?[] _categoryOptions = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _categoryOptions = new ProductCategory?[] { null }
+            .Concat(Enum.GetValues<ProductCategory>().Cast<ProductCategory?>())
+            .ToArray();
+
+        await LoadProductsAsync();
+    }
+
+    private async Task LoadProductsAsync()
+    {
+        _loading = true;
+        try
+        {
+            var result = await ProductAppService.GetListAsync(new ProductGetListInput
+            {
+                MaxResultCount = 100,
+                SkipCount = 0
+            });
+            _products = result.Items.Where(p => p.IsAvailable).ToList();
+            ApplyCategoryFilter();
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+
+    private void OnCategoryChanged(ProductCategory? category)
+    {
+        _selectedCategory = category;
+        ApplyCategoryFilter();
+    }
+
+    private void ApplyCategoryFilter()
+    {
+        _filteredProducts = _selectedCategory.HasValue
+            ? _products.Where(p => p.Category == _selectedCategory.Value).ToList()
+            : _products.ToList();
+    }
+
+    private void AddToCart(ProductDto product)
+    {
+        var existing = _cartItems.FirstOrDefault(c => c.ProductId == product.Id);
+        if (existing != null)
+        {
+            existing.Quantity++;
+        }
+        else
+        {
+            _cartItems.Add(new CartItem
+            {
+                ProductId = product.Id,
+                ProductName = product.Name,
+                UnitPrice = product.Price,
+                Quantity = 1
+            });
+        }
+        ToastService.ShowSuccess(L["ItemAdded"]);
+    }
+
+    private void IncreaseQuantity(CartItem item)
+    {
+        item.Quantity++;
+    }
+
+    private void DecreaseQuantity(CartItem item)
+    {
+        if (item.Quantity > 1)
+        {
+            item.Quantity--;
+        }
+        else
+        {
+            _cartItems.Remove(item);
+            ToastService.ShowInfo(L["ItemRemoved"]);
+        }
+    }
+
+    private void RemoveFromCart(CartItem item)
+    {
+        _cartItems.Remove(item);
+        ToastService.ShowInfo(L["ItemRemoved"]);
+    }
+
+    private void ClearCart()
+    {
+        _cartItems.Clear();
+        ToastService.ShowInfo(L["CartCleared"]);
+    }
+
+    private class CartItem
+    {
+        public Guid ProductId { get; set; }
+        public string ProductName { get; set; } = null!;
+        public decimal UnitPrice { get; set; }
+        public int Quantity { get; set; }
+        public decimal TotalPrice => UnitPrice * Quantity;
+    }
+}

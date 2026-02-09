@@ -27,6 +27,7 @@ public class FluentUiDemoDbContext :
     IIdentityDbContext
 {
     public DbSet<Todo> Todos { get; set; }
+    public DbSet<Product> Products { get; set; }
 
     #region Entities from the modules
 
@@ -67,5 +68,6 @@ public class FluentUiDemoDbContext :
         builder.ConfigureBlobStoring();
 
         builder.ConfigureTodoFeature();
+        builder.ConfigureShoppingFeature();
     }
 }

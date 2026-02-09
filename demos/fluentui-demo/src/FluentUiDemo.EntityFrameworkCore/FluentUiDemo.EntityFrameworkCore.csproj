@@ -11,6 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\FluentUiDemo.Domain\FluentUiDemo.Domain.csproj" />
     <ProjectReference Include="..\features\FluentUiDemo.Features.Todo\FluentUiDemo.Features.Todo.csproj" />
+    <ProjectReference Include="..\features\FluentUiDemo.Features.Shopping\FluentUiDemo.Features.Shopping.csproj" />
   </ItemGroup>
 
   <ItemGroup>
