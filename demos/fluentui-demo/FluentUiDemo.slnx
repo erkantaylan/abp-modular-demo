@@ -1,0 +1,25 @@
+<Solution>
+    <Folder Name="/1. Domain/">
+        <Project Path="src/FluentUiDemo.Domain.Shared/FluentUiDemo.Domain.Shared.csproj" />
+        <Project Path="src/FluentUiDemo.Domain/FluentUiDemo.Domain.csproj" />
+    </Folder>
+    <Folder Name="/2. Application/">
+        <Project Path="src/FluentUiDemo.Application.Contracts/FluentUiDemo.Application.Contracts.csproj" />
+        <Project Path="src/FluentUiDemo.Application/FluentUiDemo.Application.csproj" />
+    </Folder>
+    <Folder Name="/3. Infrastructure/">
+        <Project Path="src/FluentUiDemo.EntityFrameworkCore/FluentUiDemo.EntityFrameworkCore.csproj" />
+        <Project Path="src/FluentUiDemo.HttpApi/FluentUiDemo.HttpApi.csproj" />
+        <Project Path="src/FluentUiDemo.HttpApi.Client/FluentUiDemo.HttpApi.Client.csproj" />
+    </Folder>
+    <Folder Name="/4. Host/">
+        <Project Path="src/FluentUiDemo.Blazor/FluentUiDemo.Blazor.csproj" />
+        <Project Path="src/FluentUiDemo.DbMigrator/FluentUiDemo.DbMigrator.csproj" />
+    </Folder>
+    <Folder Name="/5. Features/">
+        <Project Path="src/features/FluentUiDemo.Features.Todo/FluentUiDemo.Features.Todo.csproj" />
+    </Folder>
+    <Folder Name="/6. Shared/">
+        <Project Path="src/FluentUiDemo.ServiceDefaults/FluentUiDemo.ServiceDefaults.csproj" />
+    </Folder>
+</Solution>

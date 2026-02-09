@@ -1,0 +1,267 @@
+@page "/todos"
+@attribute [Authorize]
+@using Microsoft.FluentUI.AspNetCore.Components
+@using Icons = Microsoft.FluentUI.AspNetCore.Components.Icons
+@using FluentUiDemo.Application
+@using FluentUiDemo.Domain
+@using FluentUiDemo.Permissions
+@using Volo.Abp.Application.Dtos
+@inject ITodoAppService TodoAppService
+@inject IDialogService DialogService
+@inject IToastService ToastService
+
+<FluentCard>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <FluentLabel Typo="Typography.H5">Todos</FluentLabel>
+        <FluentButton Appearance="Appearance.Accent" OnClick="OpenCreateDialog"
+                      IconStart="@(new Icons.Regular.Size20.Add())">New Todo</FluentButton>
+    </div>
+
+    @if (_loading)
+    {
+        <FluentProgress />
+    }
+    else if (_todos.Count == 0)
+    {
+        <FluentLabel>No todos found.</FluentLabel>
+    }
+    else
+    {
+        <FluentDataGrid Items="@_todos.AsQueryable()" TGridItem="TodoDto" Style="width: 100%;">
+            <PropertyColumn Property="@(t => t.Title)" Title="Title" />
+            <TemplateColumn Title="Status">
+                @{
+                    var appearance = context.Status switch
+                    {
+                        TodoStatus.Done => Appearance.Accent,
+                        TodoStatus.InProgress => Appearance.Neutral,
+                        _ => Appearance.Outline
+                    };
+                    var statusText = context.Status switch
+                    {
+                        TodoStatus.Done => "Done",
+                        TodoStatus.InProgress => "In Progress",
+                        _ => "Not Started"
+                    };
+                }
+                <FluentBadge Appearance="@appearance">@statusText</FluentBadge>
+            </TemplateColumn>
+            <PropertyColumn Property="@(t => t.CreatorUserName)" Title="Created By" />
+            <TemplateColumn Title="Due Date">
+                @context.DueDate?.ToString("yyyy-MM-dd")
+            </TemplateColumn>
+            <TemplateColumn Title="Created">
+                @context.CreationTime.ToString("g")
+            </TemplateColumn>
+            <TemplateColumn Title="Actions">
+                <FluentButton Appearance="Appearance.Stealth" OnClick="@(() => OpenEditDialog(context))"
+                              IconStart="@(new Icons.Regular.Size16.Edit())" Title="Edit" />
+                @if (context.Status != TodoStatus.Done)
+                {
+                    <FluentButton Appearance="Appearance.Stealth" OnClick="@(() => MarkAsDoneAsync(context))"
+                                  IconStart="@(new Icons.Regular.Size16.CheckmarkCircle())" Title="Mark as Done" />
+                }
+                <FluentButton Appearance="Appearance.Stealth" OnClick="@(() => DeleteAsync(context))"
+                              IconStart="@(new Icons.Regular.Size16.Delete())" Title="Delete" />
+            </TemplateColumn>
+        </FluentDataGrid>
+    }
+</FluentCard>
+
+@* Create Dialog *@
+@if (_createDialogVisible)
+{
+    <FluentDialog @bind-Hidden="@_createDialogHidden" Modal="true" TrapFocus="true"
+                  PreventDismissOnOverlayClick="false" @ondialogdismiss="CloseCreateDialog">
+        <FluentDialogHeader>
+            <FluentLabel Typo="Typography.H6">New Todo</FluentLabel>
+        </FluentDialogHeader>
+        <FluentDialogBody>
+            <EditForm Model="_newTodo">
+                <DataAnnotationsValidator />
+                <FluentStack Orientation="Orientation.Vertical">
+                    <FluentTextField @bind-Value="_newTodo.Title" Label="Title" Required="true"
+                                     Maxlength="256" Style="width: 100%;" />
+                    <FluentTextArea @bind-Value="_newTodo.Description" Label="Description"
+                                    Maxlength="1024" Rows="3" Style="width: 100%;" />
+                    <FluentSelect TOption="TodoStatus" @bind-SelectedOption="_newTodo.Status" Label="Status"
+                                  Items="@(Enum.GetValues<TodoStatus>())"
+                                  OptionText="@(s => GetStatusText(s))"
+                                  Style="width: 100%;" />
+                    <FluentDatePicker @bind-Value="_newTodoDueDate" Label="Due Date" />
+                </FluentStack>
+            </EditForm>
+        </FluentDialogBody>
+        <FluentDialogFooter>
+            <FluentButton Appearance="Appearance.Neutral" OnClick="CloseCreateDialog">Cancel</FluentButton>
+            <FluentButton Appearance="Appearance.Accent" OnClick="CreateAsync">Save</FluentButton>
+        </FluentDialogFooter>
+    </FluentDialog>
+}
+
+@* Edit Dialog *@
+@if (_editDialogVisible)
+{
+    <FluentDialog @bind-Hidden="@_editDialogHidden" Modal="true" TrapFocus="true"
+                  PreventDismissOnOverlayClick="false" @ondialogdismiss="CloseEditDialog">
+        <FluentDialogHeader>
+            <FluentLabel Typo="Typography.H6">Edit Todo</FluentLabel>
+        </FluentDialogHeader>
+        <FluentDialogBody>
+            <EditForm Model="_editTodo">
+                <DataAnnotationsValidator />
+                <FluentStack Orientation="Orientation.Vertical">
+                    <FluentTextField @bind-Value="_editTodo.Title" Label="Title" Required="true"
+                                     Maxlength="256" Style="width: 100%;" />
+                    <FluentTextArea @bind-Value="_editTodo.Description" Label="Description"
+                                    Maxlength="1024" Rows="3" Style="width: 100%;" />
+                    <FluentSelect TOption="TodoStatus" @bind-SelectedOption="_editTodo.Status" Label="Status"
+                                  Items="@(Enum.GetValues<TodoStatus>())"
+                                  OptionText="@(s => GetStatusText(s))"
+                                  Style="width: 100%;" />
+                    <FluentDatePicker @bind-Value="_editTodoDueDate" Label="Due Date" />
+                </FluentStack>
+            </EditForm>
+        </FluentDialogBody>
+        <FluentDialogFooter>
+            <FluentButton Appearance="Appearance.Neutral" OnClick="CloseEditDialog">Cancel</FluentButton>
+            <FluentButton Appearance="Appearance.Accent" OnClick="UpdateAsync">Save</FluentButton>
+        </FluentDialogFooter>
+    </FluentDialog>
+}
+
+@code {
+    private List<TodoDto> _todos = new();
+    private bool _loading = true;
+
+    private bool _createDialogVisible;
+    private bool _createDialogHidden = true;
+    private bool _editDialogVisible;
+    private bool _editDialogHidden = true;
+    private CreateUpdateTodoDto _newTodo = new();
+    private CreateUpdateTodoDto _editTodo = new();
+    private Guid _editingTodoId;
+    private DateTime? _newTodoDueDate;
+    private DateTime? _editTodoDueDate;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadTodosAsync();
+    }
+
+    private async Task LoadTodosAsync()
+    {
+        _loading = true;
+        try
+        {
+            var result = await TodoAppService.GetListAsync(new TodoGetListInput
+            {
+                MaxResultCount = 100,
+                SkipCount = 0
+            });
+            _todos = result.Items.ToList();
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+
+    private void OpenCreateDialog()
+    {
+        _newTodo = new CreateUpdateTodoDto();
+        _newTodoDueDate = null;
+        _createDialogVisible = true;
+        _createDialogHidden = false;
+    }
+
+    private void CloseCreateDialog()
+    {
+        _createDialogVisible = false;
+        _createDialogHidden = true;
+    }
+
+    private void OpenEditDialog(TodoDto todo)
+    {
+        _editingTodoId = todo.Id;
+        _editTodo = new CreateUpdateTodoDto
+        {
+            Title = todo.Title,
+            Description = todo.Description,
+            Status = todo.Status,
+            DueDate = todo.DueDate
+        };
+        _editTodoDueDate = todo.DueDate;
+        _editDialogVisible = true;
+        _editDialogHidden = false;
+    }
+
+    private void CloseEditDialog()
+    {
+        _editDialogVisible = false;
+        _editDialogHidden = true;
+    }
+
+    private async Task CreateAsync()
+    {
+        if (string.IsNullOrWhiteSpace(_newTodo.Title))
+            return;
+
+        _newTodo.DueDate = _newTodoDueDate;
+        await TodoAppService.CreateAsync(_newTodo);
+        CloseCreateDialog();
+        ToastService.ShowSuccess("Todo created successfully.");
+        await LoadTodosAsync();
+    }
+
+    private async Task UpdateAsync()
+    {
+        if (string.IsNullOrWhiteSpace(_editTodo.Title))
+            return;
+
+        _editTodo.DueDate = _editTodoDueDate;
+        await TodoAppService.UpdateAsync(_editingTodoId, _editTodo);
+        CloseEditDialog();
+        ToastService.ShowSuccess("Todo updated successfully.");
+        await LoadTodosAsync();
+    }
+
+    private async Task MarkAsDoneAsync(TodoDto todo)
+    {
+        var input = new CreateUpdateTodoDto
+        {
+            Title = todo.Title,
+            Description = todo.Description,
+            Status = TodoStatus.Done,
+            DueDate = todo.DueDate
+        };
+
+        await TodoAppService.UpdateAsync(todo.Id, input);
+        ToastService.ShowSuccess("Todo marked as done.");
+        await LoadTodosAsync();
+    }
+
+    private static string GetStatusText(TodoStatus status) => status switch
+    {
+        TodoStatus.Done => "Done",
+        TodoStatus.InProgress => "In Progress",
+        _ => "Not Started"
+    };
+
+    private async Task DeleteAsync(TodoDto todo)
+    {
+        var dialog = await DialogService.ShowConfirmationAsync(
+            "Are you sure you want to delete this todo?",
+            "Delete",
+            "Cancel",
+            "Confirm Delete");
+
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            await TodoAppService.DeleteAsync(todo.Id);
+            ToastService.ShowInfo("Todo deleted.");
+            await LoadTodosAsync();
+        }
+    }
+}

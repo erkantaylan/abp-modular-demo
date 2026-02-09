@@ -1,0 +1,9 @@
+@using Microsoft.FluentUI.AspNetCore.Components
+
+<FluentNavLink Href="/" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.Home())">Home</FluentNavLink>
+<FluentNavLink Href="/todos" Match="NavLinkMatch.Prefix" Icon="@(new Icons.Regular.Size20.TaskListSquareLtr())">Todos</FluentNavLink>
+<FluentNavGroup Title="Administration" Icon="@(new Icons.Regular.Size20.ShieldTask())" Expanded="false">
+    <FluentNavLink Href="/identity/users" Match="NavLinkMatch.Prefix" Icon="@(new Icons.Regular.Size20.People())">Users</FluentNavLink>
+    <FluentNavLink Href="/identity/roles" Match="NavLinkMatch.Prefix" Icon="@(new Icons.Regular.Size20.Shield())">Roles</FluentNavLink>
+    <FluentNavLink Href="/setting-management" Match="NavLinkMatch.Prefix" Icon="@(new Icons.Regular.Size20.Settings())">Settings</FluentNavLink>
+</FluentNavGroup>

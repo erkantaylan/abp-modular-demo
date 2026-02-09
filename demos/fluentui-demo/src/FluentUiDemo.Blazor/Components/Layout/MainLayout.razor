@@ -1,0 +1,53 @@
+@inherits LayoutComponentBase
+@using Microsoft.FluentUI.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
+
+<FluentToastProvider />
+<FluentDialogProvider />
+<FluentTooltipProvider />
+
+<FluentLayout>
+    <FluentHeader>
+        <FluentStack Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.Left"
+                     VerticalAlignment="VerticalAlignment.Center" Style="width: 100%;">
+            <FluentButton Appearance="Appearance.Stealth" OnClick="@ToggleNavMenu"
+                          IconStart="@(new Icons.Regular.Size24.Navigation())" />
+            <FluentLabel Typo="Typography.H5" Style="margin-left: 12px; color: white;">FluentUI Demo</FluentLabel>
+            <FluentSpacer />
+            <AuthorizeView>
+                <Authorized>
+                    <FluentLabel Style="color: white; margin-right: 8px;">@context.User.Identity?.Name</FluentLabel>
+                    <FluentAnchor Href="/Account/Logout" Appearance="Appearance.Stealth">
+                        <FluentIcon Value="@(new Icons.Regular.Size20.SignOut())" Color="Color.Fill" />
+                    </FluentAnchor>
+                </Authorized>
+                <NotAuthorized>
+                    <FluentAnchor Href="/Account/Login" Appearance="Appearance.Accent">Login</FluentAnchor>
+                </NotAuthorized>
+            </AuthorizeView>
+        </FluentStack>
+    </FluentHeader>
+    <FluentStack Orientation="Orientation.Horizontal" Style="height: calc(100vh - 50px); width: 100%;">
+        @if (_navMenuExpanded)
+        {
+            <FluentNavMenu Width="250" Collapsible="true" @bind-Expanded="_navMenuExpanded"
+                           Style="height: 100%; border-right: 1px solid var(--neutral-stroke-divider-rest);">
+                <NavMenu />
+            </FluentNavMenu>
+        }
+        <FluentBodyContent Style="padding: 24px; overflow-y: auto; flex: 1;">
+            @Body
+        </FluentBodyContent>
+    </FluentStack>
+</FluentLayout>
+
+@code {
+    private bool _navMenuExpanded = true;
+
+    private void ToggleNavMenu()
+    {
+        _navMenuExpanded = !_navMenuExpanded;
+    }
+}
