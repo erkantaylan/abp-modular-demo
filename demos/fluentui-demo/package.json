@@ -1,0 +1,12 @@
+{
+  "name": "fluentui-demo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Frontend dependencies for FluentUI Blazor demo",
+  "scripts": {
+    "build:css": "cp node_modules/bulma/css/bulma.min.css src/FluentUiDemo.Blazor/wwwroot/lib/bulma/bulma.min.css"
+  },
+  "dependencies": {
+    "bulma": "^1.0.4"
+  }
+}
