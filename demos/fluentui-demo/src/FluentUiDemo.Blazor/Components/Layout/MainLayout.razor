@@ -28,8 +28,10 @@
                           SelectedOption="@_selectedLanguage"
                           SelectedOptionChanged="@OnLanguageChanged"
                           OptionText="@(l => l.DisplayName)"
+                          OptionValue="@(l => l.CultureName)"
+                          OptionSelected="@(l => l.CultureName == _selectedLanguage?.CultureName)"
                           Width="140px"
-                          Style="min-width: 140px; --neutral-fill-input-rest: rgba(255,255,255,0.1); color: white;" />
+                          Style="min-width: 140px; --neutral-fill-input-rest: rgba(255,255,255,0.1); --neutral-foreground-rest: white; color: white;" />
             <AuthorizeView>
                 <Authorized>
                     <FluentLabel Style="color: white; margin-right: 8px;">@context.User.Identity?.Name</FluentLabel>
