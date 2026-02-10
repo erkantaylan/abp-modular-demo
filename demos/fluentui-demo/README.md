@@ -2,6 +2,10 @@
 
 A modular ABP Framework demo application showcasing FluentUI Blazor components, real-time chat with SignalR, and cloud-native orchestration with .NET Aspire.
 
+## Integration Guide
+
+For a comprehensive walkthrough of how this project was built — including FluentUI integration, custom Account UI replacement, external login setup (Google & GitHub), and common issues — see **[GUIDE.md](GUIDE.md)**.
+
 ## Prerequisites
 
 - [.NET 10.0 SDK](https://dotnet.microsoft.com/download)
