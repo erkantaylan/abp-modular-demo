@@ -155,12 +155,6 @@ public class FluentUiDemoBlazorModule : AbpModule
         // Register FluentUI services
         context.Services.AddFluentUIComponents();
 
-        // Disable ABP MVC client libs check — not needed for Blazor Server with FluentUI
-        Configure<AbpMvcLibsOptions>(options =>
-        {
-            options.CheckLibs = false;
-        });
-
         ConfigureStudio(hostingEnvironment);
         ConfigureAuthentication(context);
         ConfigureUrls(configuration);

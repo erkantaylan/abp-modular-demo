@@ -266,8 +266,8 @@ src/LayeredDemo.DbMigrator/Logs/*
 src/LayeredDemo.Blazor/Logs/*
 src/LayeredDemo.Blazor.Tiered/Logs/*
 
-# Use abp install-libs to restore.
-**/wwwroot/libs/*
+# ABP client libs — committed so no need to run abp install-libs
+# **/wwwroot/libs/*
 
 # IdentityServer temp files
 tempkey.rsa
