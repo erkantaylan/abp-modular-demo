@@ -25,6 +25,7 @@ using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Components.Web;
 using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.Libs;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
@@ -153,6 +154,12 @@ public class FluentUiDemoBlazorModule : AbpModule
 
         // Register FluentUI services
         context.Services.AddFluentUIComponents();
+
+        // Disable ABP MVC client libs check — not needed for Blazor Server with FluentUI
+        Configure<AbpMvcLibsOptions>(options =>
+        {
+            options.CheckLibs = false;
+        });
 
         ConfigureStudio(hostingEnvironment);
         ConfigureAuthentication(context);
