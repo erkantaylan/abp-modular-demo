@@ -55,6 +55,11 @@
     "Dashboard:NoDueDateSet": "No due date",
     "Dashboard:NoRecentActivity": "No recent activity yet.",
     "Dashboard:CreatedBy": "by {0}",
-    "Dashboard:StatusOverview": "Status Overview"
+    "Dashboard:StatusOverview": "Status Overview",
+    "ExternalLogin:Google": "Sign in with Google",
+    "ExternalLogin:GitHub": "Sign in with GitHub",
+    "ExternalLogin:OrSignInWith": "Or sign in with",
+    "ExternalLogin:LinkAccount": "Link external account",
+    "ExternalLogin:NewAccountCreated": "A new account has been created using your external login."
   }
 }

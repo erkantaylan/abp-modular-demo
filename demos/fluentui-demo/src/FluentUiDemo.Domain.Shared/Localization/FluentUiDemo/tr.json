@@ -55,6 +55,11 @@
     "Dashboard:NoDueDateSet": "Bitiş tarihi yok",
     "Dashboard:NoRecentActivity": "Henüz son aktivite yok.",
     "Dashboard:CreatedBy": "{0} tarafından",
-    "Dashboard:StatusOverview": "Durum Genel Bakışı"
+    "Dashboard:StatusOverview": "Durum Genel Bakışı",
+    "ExternalLogin:Google": "Google ile giriş yap",
+    "ExternalLogin:GitHub": "GitHub ile giriş yap",
+    "ExternalLogin:OrSignInWith": "Veya şununla giriş yap",
+    "ExternalLogin:LinkAccount": "Harici hesap bağla",
+    "ExternalLogin:NewAccountCreated": "Harici giriş bilgilerinizle yeni bir hesap oluşturuldu."
   }
 }

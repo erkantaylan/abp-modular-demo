@@ -10,6 +10,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Extensions.DependencyInjection;
 using Microsoft.FluentUI.AspNetCore.Components;
+using Microsoft.AspNetCore.Authentication.Google;
+using AspNet.Security.OAuth.GitHub;
 using OpenIddict.Validation.AspNetCore;
 using OpenIddict.Server.AspNetCore;
 using Microsoft.Extensions.Options;
@@ -180,11 +182,34 @@ public class FluentUiDemoBlazorModule : AbpModule
 
     private void ConfigureAuthentication(ServiceConfigurationContext context)
     {
+        var configuration = context.Services.GetConfiguration();
+
         context.Services.ForwardIdentityAuthenticationForBearer(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
         context.Services.Configure<AbpClaimsPrincipalFactoryOptions>(options =>
         {
             options.IsDynamicClaimsEnabled = true;
         });
+
+        if (!configuration["Authentication:Google:ClientId"].IsNullOrWhiteSpace())
+        {
+            context.Services.AddAuthentication()
+                .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
+                {
+                    options.ClientId = configuration["Authentication:Google:ClientId"]!;
+                    options.ClientSecret = configuration["Authentication:Google:ClientSecret"]!;
+                });
+        }
+
+        if (!configuration["Authentication:GitHub:ClientId"].IsNullOrWhiteSpace())
+        {
+            context.Services.AddAuthentication()
+                .AddGitHub(GitHubAuthenticationDefaults.AuthenticationScheme, options =>
+                {
+                    options.ClientId = configuration["Authentication:GitHub:ClientId"]!;
+                    options.ClientSecret = configuration["Authentication:GitHub:ClientSecret"]!;
+                    options.Scope.Add("user:email");
+                });
+        }
     }
 
     private void ConfigureUrls(IConfiguration configuration)
