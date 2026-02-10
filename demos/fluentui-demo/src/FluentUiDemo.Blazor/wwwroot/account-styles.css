@@ -1,0 +1,288 @@
+.account-layout {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: var(--neutral-layer-1, #faf9f8);
+}
+
+.account-card {
+    width: 100%;
+    max-width: 440px;
+    margin: 2rem auto;
+    padding: 2.5rem;
+    background: var(--neutral-layer-floating, #ffffff);
+    border-radius: calc(var(--layer-corner-radius) * 1px, 8px);
+    box-shadow: var(--elevation-shadow-card-rest,
+        0px 1.6px 3.6px rgba(0, 0, 0, 0.132),
+        0px 0.3px 0.9px rgba(0, 0, 0, 0.108));
+}
+
+.account-card h4 {
+    font-family: var(--body-font, 'Segoe UI', sans-serif);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--neutral-foreground-rest, #242424);
+    margin-bottom: 0.25rem;
+}
+
+.account-card .subtitle {
+    color: var(--neutral-foreground-hint, #616161);
+    font-size: 0.875rem;
+    margin-bottom: 1.5rem;
+}
+
+.account-card .subtitle a {
+    color: var(--accent-foreground-rest, #0078d4);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.account-card .subtitle a:hover {
+    text-decoration: underline;
+}
+
+.account-form .form-field {
+    margin-bottom: 1rem;
+}
+
+.account-form label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--neutral-foreground-rest, #242424);
+    margin-bottom: 0.375rem;
+}
+
+.account-form input[type="text"],
+.account-form input[type="email"],
+.account-form input[type="password"] {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    font-family: var(--body-font, 'Segoe UI', sans-serif);
+    line-height: 1.5;
+    color: var(--neutral-foreground-rest, #242424);
+    background-color: var(--neutral-fill-input-rest, #ffffff);
+    border: 1px solid var(--neutral-stroke-rest, #d1d1d1);
+    border-radius: calc(var(--control-corner-radius) * 1px, 4px);
+    outline: none;
+    transition: border-color 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
+    box-sizing: border-box;
+}
+
+.account-form input[type="text"]:focus,
+.account-form input[type="email"]:focus,
+.account-form input[type="password"]:focus {
+    border-color: var(--accent-fill-rest, #0078d4);
+    box-shadow: 0 0 0 1px var(--accent-fill-rest, #0078d4);
+}
+
+.account-form input[type="text"]::placeholder,
+.account-form input[type="email"]::placeholder,
+.account-form input[type="password"]::placeholder {
+    color: var(--neutral-foreground-hint, #616161);
+}
+
+.account-form .password-group {
+    display: flex;
+    position: relative;
+}
+
+.account-form .password-group input {
+    flex: 1;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.account-form .password-group .toggle-password {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0.75rem;
+    background: var(--neutral-fill-rest, #f5f5f5);
+    border: 1px solid var(--neutral-stroke-rest, #d1d1d1);
+    border-left: none;
+    border-top-right-radius: calc(var(--control-corner-radius) * 1px, 4px);
+    border-bottom-right-radius: calc(var(--control-corner-radius) * 1px, 4px);
+    cursor: pointer;
+    color: var(--neutral-foreground-rest, #242424);
+    font-size: 0.875rem;
+}
+
+.account-form .password-group .toggle-password:hover {
+    background: var(--neutral-fill-hover, #e1e1e1);
+}
+
+.account-form .validation-error {
+    color: var(--error, #a4262c);
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+}
+
+.account-form .remember-forgot-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.account-form .remember-forgot-row label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 400;
+    cursor: pointer;
+    margin-bottom: 0;
+}
+
+.account-form .remember-forgot-row a {
+    color: var(--accent-foreground-rest, #0078d4);
+    text-decoration: none;
+    font-size: 0.875rem;
+}
+
+.account-form .remember-forgot-row a:hover {
+    text-decoration: underline;
+}
+
+.account-form .btn-primary {
+    display: block;
+    width: 100%;
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    font-family: var(--body-font, 'Segoe UI', sans-serif);
+    color: var(--foreground-on-accent-rest, #ffffff);
+    background-color: var(--accent-fill-rest, #0078d4);
+    border: none;
+    border-radius: calc(var(--control-corner-radius) * 1px, 4px);
+    cursor: pointer;
+    transition: background-color 0.1s ease-in-out;
+    text-align: center;
+}
+
+.account-form .btn-primary:hover {
+    background-color: var(--accent-fill-hover, #106ebe);
+}
+
+.account-form .btn-primary:active {
+    background-color: var(--accent-fill-active, #005a9e);
+}
+
+.account-form .btn-secondary {
+    display: block;
+    width: 100%;
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    font-family: var(--body-font, 'Segoe UI', sans-serif);
+    color: var(--neutral-foreground-rest, #242424);
+    background-color: var(--neutral-fill-rest, #f5f5f5);
+    border: 1px solid var(--neutral-stroke-rest, #d1d1d1);
+    border-radius: calc(var(--control-corner-radius) * 1px, 4px);
+    cursor: pointer;
+    transition: background-color 0.1s ease-in-out;
+    text-align: center;
+    margin-top: 0.5rem;
+}
+
+.account-form .btn-secondary:hover {
+    background-color: var(--neutral-fill-hover, #e1e1e1);
+}
+
+.account-form .buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+}
+
+.account-card .divider {
+    display: flex;
+    align-items: center;
+    margin: 1.5rem 0;
+    color: var(--neutral-foreground-hint, #616161);
+    font-size: 0.8125rem;
+}
+
+.account-card .divider::before,
+.account-card .divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid var(--neutral-stroke-divider-rest, #e1e1e1);
+}
+
+.account-card .divider::before {
+    margin-right: 0.75rem;
+}
+
+.account-card .divider::after {
+    margin-left: 0.75rem;
+}
+
+.account-card .external-providers {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.account-card .external-providers .btn-external {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    font-family: var(--body-font, 'Segoe UI', sans-serif);
+    color: var(--neutral-foreground-rest, #242424);
+    background-color: var(--neutral-layer-floating, #ffffff);
+    border: 1px solid var(--neutral-stroke-rest, #d1d1d1);
+    border-radius: calc(var(--control-corner-radius) * 1px, 4px);
+    cursor: pointer;
+    transition: background-color 0.1s ease-in-out;
+}
+
+.account-card .external-providers .btn-external:hover {
+    background-color: var(--neutral-fill-hover, #e1e1e1);
+}
+
+.account-card .alert-warning {
+    padding: 0.75rem 1rem;
+    background-color: #fff4ce;
+    border: 1px solid #ffd335;
+    border-radius: calc(var(--control-corner-radius) * 1px, 4px);
+    color: #5a4400;
+    font-size: 0.875rem;
+}
+
+.account-card .alert-danger {
+    padding: 0.75rem 1rem;
+    background-color: #fde7e9;
+    border: 1px solid #f1707b;
+    border-radius: calc(var(--control-corner-radius) * 1px, 4px);
+    color: #a80000;
+    font-size: 0.875rem;
+}
+
+.account-card .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    color: var(--accent-foreground-rest, #0078d4);
+    text-decoration: none;
+    font-size: 0.875rem;
+    margin-top: 1rem;
+}
+
+.account-card .back-link:hover {
+    text-decoration: underline;
+}
+
+.account-card .info-text {
+    color: var(--neutral-foreground-hint, #616161);
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+}

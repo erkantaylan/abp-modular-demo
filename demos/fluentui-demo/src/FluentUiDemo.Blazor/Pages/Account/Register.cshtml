@@ -1,0 +1,79 @@
+@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.Account.Localization
+@model FluentUiDemo.Blazor.Pages.Account.FluentRegisterModel
+@inject IHtmlLocalizer<AccountResource> L
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@L["Register"] - FluentUI Demo</title>
+    <base href="/" />
+    <link href="_content/Microsoft.FluentUI.AspNetCore.Components/css/reboot.css" rel="stylesheet" />
+    <link href="account-styles.css" rel="stylesheet" />
+</head>
+<body>
+<div class="account-layout">
+    <div class="account-card">
+        <h4>@L["Register"]</h4>
+        <div class="subtitle">
+            @L["AlreadyRegistered"]
+            <a href="@Url.Page("./Login", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})">@L["Login"]</a>
+        </div>
+
+        <form method="post" class="account-form">
+            @if (Model.EnableLocalRegister || Model.IsExternalLogin)
+            {
+                <div class="form-field">
+                    <label asp-for="Input.UserName"></label>
+                    <input asp-for="Input.UserName" autofocus />
+                    <span asp-validation-for="Input.UserName" class="validation-error"></span>
+                </div>
+            }
+
+            @if (Model.EnableLocalRegister || Model.IsExternalLogin)
+            {
+                <div class="form-field">
+                    <label asp-for="Input.EmailAddress"></label>
+                    <input asp-for="Input.EmailAddress" type="email" />
+                    <span asp-validation-for="Input.EmailAddress" class="validation-error"></span>
+                </div>
+            }
+
+            @if (!Model.IsExternalLogin && Model.EnableLocalRegister)
+            {
+                <div class="form-field">
+                    <label asp-for="Input.Password"></label>
+                    <input asp-for="Input.Password" type="password" autocomplete="new-password" />
+                    <span asp-validation-for="Input.Password" class="validation-error"></span>
+                </div>
+            }
+
+            @if (Model.EnableLocalRegister || Model.IsExternalLogin)
+            {
+                <div class="buttons">
+                    <button type="submit" class="btn-primary">@L["Register"]</button>
+                </div>
+            }
+        </form>
+
+        @if (!Model.IsExternalLogin && Model.VisibleExternalProviders.Any())
+        {
+            <div class="divider">@L["OrRegisterWith"]</div>
+            <form asp-page="./Login" asp-page-handler="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" asp-route-returnUrlHash="@Model.ReturnUrlHash" method="post">
+                <div class="external-providers">
+                    @foreach (var provider in Model.VisibleExternalProviders)
+                    {
+                        <button type="submit" class="btn-external" name="provider" value="@provider.AuthenticationScheme" title="@L["RegisterUsingYourProviderAccount", provider.DisplayName]">@provider.DisplayName</button>
+                    }
+                </div>
+            </form>
+        }
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,104 @@
+@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.Account.Localization
+@using Volo.Abp.Account.Settings
+@using Volo.Abp.Account.Web.Pages.Account
+@using Volo.Abp.Identity
+@using Volo.Abp.Settings
+@model FluentUiDemo.Blazor.Pages.Account.FluentLoginModel
+@inject IHtmlLocalizer<AccountResource> L
+@inject Volo.Abp.Settings.ISettingProvider SettingProvider
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@L["Login"] - FluentUI Demo</title>
+    <base href="/" />
+    <link href="_content/Microsoft.FluentUI.AspNetCore.Components/css/reboot.css" rel="stylesheet" />
+    <link href="account-styles.css" rel="stylesheet" />
+</head>
+<body>
+<div class="account-layout">
+    <div class="account-card">
+        <h4>@L["Login"]</h4>
+        @if (await SettingProvider.IsTrueAsync(AccountSettingNames.IsSelfRegistrationEnabled))
+        {
+            <div class="subtitle">
+                @L["AreYouANewUser"]
+                <a href="@Url.Page("./Register", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})">@L["Register"]</a>
+            </div>
+        }
+
+        @if (Model.EnableLocalLogin)
+        {
+            <form method="post" class="account-form">
+                <div class="form-field">
+                    <label asp-for="LoginInput.UserNameOrEmailAddress"></label>
+                    <input asp-for="LoginInput.UserNameOrEmailAddress" class="form-control" autofocus />
+                    <span asp-validation-for="LoginInput.UserNameOrEmailAddress" class="validation-error"></span>
+                </div>
+
+                <div class="form-field">
+                    <label asp-for="LoginInput.Password"></label>
+                    <div class="password-group">
+                        <input type="password" asp-for="LoginInput.Password" autocomplete="current-password" maxlength="@IdentityUserConsts.MaxPasswordLength" />
+                        <button class="toggle-password" type="button" id="PasswordVisibilityButton" aria-label="Toggle password visibility">&#128065;</button>
+                    </div>
+                    <span asp-validation-for="LoginInput.Password" class="validation-error"></span>
+                </div>
+
+                <div class="remember-forgot-row">
+                    <label>
+                        <input asp-for="LoginInput.RememberMe" />
+                        @L["RememberMe"]
+                    </label>
+                    <a href="@Url.Page("./ForgotPassword", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})">@L["ForgotPassword"]</a>
+                </div>
+
+                <div class="buttons">
+                    <button type="submit" class="btn-primary" name="Action" value="Login">@L["Login"]</button>
+                    @if (Model.ShowCancelButton)
+                    {
+                        <button type="submit" class="btn-secondary" formnovalidate="formnovalidate" name="Action" value="Cancel">@L["Cancel"]</button>
+                    }
+                </div>
+            </form>
+        }
+
+        @if (Model.VisibleExternalProviders.Any())
+        {
+            <div class="divider">@L["OrLoginWith"]</div>
+            <form asp-page="./Login" asp-page-handler="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" asp-route-returnUrlHash="@Model.ReturnUrlHash" method="post">
+                <div class="external-providers">
+                    @foreach (var provider in Model.VisibleExternalProviders)
+                    {
+                        <button type="submit" class="btn-external" name="provider" value="@provider.AuthenticationScheme" title="@L["LogInUsingYourProviderAccount", provider.DisplayName]">@provider.DisplayName</button>
+                    }
+                </div>
+            </form>
+        }
+
+        @if (!Model.EnableLocalLogin && !Model.VisibleExternalProviders.Any())
+        {
+            <div class="alert-warning">
+                <strong>@L["InvalidLoginRequest"]</strong>
+                @L["ThereAreNoLoginSchemesConfiguredForThisClient"]
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    document.getElementById('PasswordVisibilityButton')?.addEventListener('click', function () {
+        var input = document.querySelector('input[name="LoginInput.Password"]');
+        if (input) {
+            input.type = input.type === 'password' ? 'text' : 'password';
+        }
+    });
+</script>
+</body>
+</html>
