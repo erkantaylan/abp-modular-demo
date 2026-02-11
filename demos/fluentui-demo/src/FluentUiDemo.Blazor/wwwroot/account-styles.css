@@ -1,12 +1,17 @@
+/* ===== Account Layout ===== */
 .account-layout {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     background-color: var(--neutral-layer-1, #faf9f8);
+    font-family: var(--body-font, 'Segoe UI Variable', 'Segoe UI', sans-serif);
+    color: var(--neutral-foreground-rest, #242424);
 }
 
+/* ===== Account Card (FluentCard style) ===== */
 .account-card {
+    position: relative;
     width: 100%;
     max-width: 440px;
     margin: 2rem auto;
@@ -18,187 +23,319 @@
         0px 0.3px 0.9px rgba(0, 0, 0, 0.108));
 }
 
-.account-card h4 {
-    font-family: var(--body-font, 'Segoe UI', sans-serif);
+/* ===== Card Header ===== */
+.account-card .card-title {
     font-size: 1.5rem;
     font-weight: 600;
     color: var(--neutral-foreground-rest, #242424);
-    margin-bottom: 0.25rem;
+    margin: 0 0 0.25rem 0;
+    line-height: 1.33;
 }
 
-.account-card .subtitle {
+.account-card .card-subtitle {
     color: var(--neutral-foreground-hint, #616161);
     font-size: 0.875rem;
     margin-bottom: 1.5rem;
 }
 
-.account-card .subtitle a {
+.account-card .card-subtitle a {
     color: var(--accent-foreground-rest, #0078d4);
     text-decoration: none;
     font-weight: 600;
 }
 
-.account-card .subtitle a:hover {
+.account-card .card-subtitle a:hover {
     text-decoration: underline;
 }
 
-.account-form .form-field {
+/* ===== Language Selector (FluentSelect style, inside card) ===== */
+.card-language-selector {
+    display: flex;
+    justify-content: flex-end;
     margin-bottom: 1rem;
 }
 
-.account-form label {
+.fluent-select-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.fluent-select {
+    appearance: none;
+    -webkit-appearance: none;
+    background: var(--neutral-fill-input-rest, #ffffff);
+    border: 1px solid var(--neutral-stroke-rest, #d1d1d1);
+    border-radius: calc(var(--control-corner-radius, 4) * 1px);
+    padding: 0.375rem 2rem 0.375rem 0.75rem;
+    font-size: 0.8125rem;
+    font-family: inherit;
+    color: var(--neutral-foreground-rest, #242424);
+    cursor: pointer;
+    outline: none;
+    min-width: 120px;
+    line-height: 1.4;
+    transition: border-color 0.1s ease-in-out;
+}
+
+.fluent-select:hover {
+    border-color: var(--neutral-stroke-hover, #a3a3a3);
+}
+
+.fluent-select:focus {
+    border-color: var(--accent-fill-rest, #0078d4);
+    box-shadow: 0 0 0 1px var(--accent-fill-rest, #0078d4);
+}
+
+.fluent-select-chevron {
+    position: absolute;
+    right: 0.625rem;
+    pointer-events: none;
+    color: var(--neutral-foreground-rest, #242424);
+}
+
+/* ===== Form ===== */
+.login-form {
+    margin-top: 0.5rem;
+}
+
+/* ===== FluentTextField Style ===== */
+.fluent-field {
+    margin-bottom: 1.25rem;
+}
+
+.fluent-field-label {
     display: block;
     font-size: 0.875rem;
     font-weight: 600;
     color: var(--neutral-foreground-rest, #242424);
     margin-bottom: 0.375rem;
+    line-height: 1.4;
 }
 
-.account-form input[type="text"],
-.account-form input[type="email"],
-.account-form input[type="password"] {
+.fluent-input {
     display: block;
     width: 100%;
     padding: 0.5rem 0.75rem;
     font-size: 0.875rem;
-    font-family: var(--body-font, 'Segoe UI', sans-serif);
+    font-family: inherit;
     line-height: 1.5;
     color: var(--neutral-foreground-rest, #242424);
     background-color: var(--neutral-fill-input-rest, #ffffff);
     border: 1px solid var(--neutral-stroke-rest, #d1d1d1);
+    border-bottom-width: 2px;
+    border-bottom-color: var(--neutral-stroke-strong-rest, #ababab);
     border-radius: calc(var(--control-corner-radius, 4) * 1px);
     outline: none;
-    transition: border-color 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
     box-sizing: border-box;
+    transition: border-color 0.1s ease-in-out;
 }
 
-.account-form input[type="text"]:focus,
-.account-form input[type="email"]:focus,
-.account-form input[type="password"]:focus {
-    border-color: var(--accent-fill-rest, #0078d4);
-    box-shadow: 0 0 0 1px var(--accent-fill-rest, #0078d4);
+.fluent-input:hover {
+    border-color: var(--neutral-stroke-hover, #a3a3a3);
+    border-bottom-color: var(--neutral-stroke-strong-hover, #868686);
 }
 
-.account-form input[type="text"]::placeholder,
-.account-form input[type="email"]::placeholder,
-.account-form input[type="password"]::placeholder {
+.fluent-input:focus {
+    border-color: var(--neutral-stroke-rest, #d1d1d1);
+    border-bottom-color: var(--accent-fill-rest, #0078d4);
+    border-bottom-width: 2px;
+}
+
+.fluent-input::placeholder {
+    color: transparent;
+}
+
+.fluent-input:not(:placeholder-shown)::placeholder,
+.fluent-input:focus::placeholder {
     color: var(--neutral-foreground-hint, #616161);
 }
 
-.account-form .password-group {
+/* ===== Password Input Group ===== */
+.fluent-input-group {
     display: flex;
     position: relative;
 }
 
-.account-form .password-group input {
+.fluent-input-group .fluent-input {
     flex: 1;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
+    padding-right: 2.5rem;
 }
 
-.account-form .password-group .toggle-password {
+.fluent-input-end-button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 0.75rem;
-    background: var(--neutral-fill-rest, #f5f5f5);
-    border: 1px solid var(--neutral-stroke-rest, #d1d1d1);
-    border-left: none;
-    border-top-right-radius: calc(var(--control-corner-radius, 4) * 1px);
-    border-bottom-right-radius: calc(var(--control-corner-radius, 4) * 1px);
+    width: 2.5rem;
+    padding: 0;
+    background: transparent;
+    border: none;
     cursor: pointer;
     color: var(--neutral-foreground-rest, #242424);
-    font-size: 0.875rem;
+    border-radius: 0 calc(var(--control-corner-radius, 4) * 1px) calc(var(--control-corner-radius, 4) * 1px) 0;
+    outline: none;
+    transition: background-color 0.1s ease-in-out;
 }
 
-.account-form .password-group .toggle-password:hover {
-    background: var(--neutral-fill-hover, #e1e1e1);
+.fluent-input-end-button:hover {
+    background-color: var(--neutral-fill-stealth-hover, rgba(0, 0, 0, 0.04));
 }
 
-.account-form .validation-error {
+.fluent-input-end-button:active {
+    background-color: var(--neutral-fill-stealth-active, rgba(0, 0, 0, 0.06));
+}
+
+/* ===== Validation Message ===== */
+.fluent-validation-message {
+    display: block;
     color: var(--error, #a4262c);
     font-size: 0.75rem;
     margin-top: 0.25rem;
+    line-height: 1.33;
 }
 
-.account-form .remember-forgot-row {
+/* ===== FluentCheckbox Style ===== */
+.fluent-checkbox-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
 }
 
-.account-form .remember-forgot-row label {
+.fluent-checkbox {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    font-weight: 400;
     cursor: pointer;
-    margin-bottom: 0;
+    user-select: none;
+    font-size: 0.875rem;
 }
 
-.account-form .remember-forgot-row a {
+.fluent-checkbox input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+}
+
+.fluent-checkbox-indicator {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border: 1px solid var(--neutral-stroke-strong-rest, #ababab);
+    border-radius: calc(var(--control-corner-radius, 4) * 1px);
+    background-color: var(--neutral-fill-input-rest, #ffffff);
+    transition: all 0.1s ease-in-out;
+    flex-shrink: 0;
+    color: transparent;
+}
+
+.fluent-checkbox input[type="checkbox"]:checked ~ .fluent-checkbox-indicator {
+    background-color: var(--accent-fill-rest, #0078d4);
+    border-color: var(--accent-fill-rest, #0078d4);
+    color: var(--foreground-on-accent-rest, #ffffff);
+}
+
+.fluent-checkbox input[type="checkbox"]:focus-visible ~ .fluent-checkbox-indicator {
+    outline: 2px solid var(--focus-stroke-outer, #000000);
+    outline-offset: 2px;
+}
+
+.fluent-checkbox:hover .fluent-checkbox-indicator {
+    border-color: var(--neutral-stroke-strong-hover, #868686);
+}
+
+.fluent-checkbox input[type="checkbox"]:checked + .fluent-checkbox-indicator:hover {
+    background-color: var(--accent-fill-hover, #106ebe);
+    border-color: var(--accent-fill-hover, #106ebe);
+}
+
+.fluent-checkbox-label {
+    font-weight: 400;
+    color: var(--neutral-foreground-rest, #242424);
+}
+
+/* ===== Links ===== */
+.fluent-link {
     color: var(--accent-foreground-rest, #0078d4);
     text-decoration: none;
     font-size: 0.875rem;
 }
 
-.account-form .remember-forgot-row a:hover {
+.fluent-link:hover {
     text-decoration: underline;
 }
 
-.account-form .btn-primary {
-    display: block;
+/* ===== FluentButton Styles ===== */
+.fluent-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
     padding: 0.625rem 1.25rem;
     font-size: 0.875rem;
     font-weight: 600;
-    font-family: var(--body-font, 'Segoe UI', sans-serif);
-    color: var(--foreground-on-accent-rest, #ffffff);
-    background-color: var(--accent-fill-rest, #0078d4);
-    border: none;
+    font-family: inherit;
+    line-height: 1.4;
     border-radius: calc(var(--control-corner-radius, 4) * 1px);
     cursor: pointer;
-    transition: background-color 0.1s ease-in-out;
+    outline: none;
+    border: none;
+    transition: background-color 0.1s ease-in-out, border-color 0.1s ease-in-out;
+    box-sizing: border-box;
     text-align: center;
 }
 
-.account-form .btn-primary:hover {
+.fluent-button:focus-visible {
+    outline: 2px solid var(--focus-stroke-outer, #000000);
+    outline-offset: 2px;
+}
+
+/* Accent (Primary) */
+.fluent-button-accent {
+    color: var(--foreground-on-accent-rest, #ffffff);
+    background-color: var(--accent-fill-rest, #0078d4);
+}
+
+.fluent-button-accent:hover {
     background-color: var(--accent-fill-hover, #106ebe);
 }
 
-.account-form .btn-primary:active {
+.fluent-button-accent:active {
     background-color: var(--accent-fill-active, #005a9e);
 }
 
-.account-form .btn-secondary {
-    display: block;
-    width: 100%;
-    padding: 0.625rem 1.25rem;
-    font-size: 0.875rem;
-    font-weight: 600;
-    font-family: var(--body-font, 'Segoe UI', sans-serif);
+/* Outline (Secondary / Neutral) */
+.fluent-button-outline {
     color: var(--neutral-foreground-rest, #242424);
     background-color: var(--neutral-fill-rest, #f5f5f5);
     border: 1px solid var(--neutral-stroke-rest, #d1d1d1);
-    border-radius: calc(var(--control-corner-radius, 4) * 1px);
-    cursor: pointer;
-    transition: background-color 0.1s ease-in-out;
-    text-align: center;
-    margin-top: 0.5rem;
 }
 
-.account-form .btn-secondary:hover {
+.fluent-button-outline:hover {
     background-color: var(--neutral-fill-hover, #e1e1e1);
 }
 
-.account-form .buttons {
+.fluent-button-outline:active {
+    background-color: var(--neutral-fill-active, #d6d6d6);
+}
+
+/* ===== Form Actions ===== */
+.form-actions {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
     margin-top: 1.5rem;
 }
 
+/* ===== Divider ===== */
 .account-card .divider {
     display: flex;
     align-items: center;
@@ -214,41 +351,18 @@
     border-bottom: 1px solid var(--neutral-stroke-divider-rest, #e1e1e1);
 }
 
-.account-card .divider::before {
-    margin-right: 0.75rem;
+.account-card .divider span {
+    padding: 0 0.75rem;
 }
 
-.account-card .divider::after {
-    margin-left: 0.75rem;
-}
-
+/* ===== External Providers ===== */
 .account-card .external-providers {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
 }
 
-.account-card .external-providers .btn-external {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    padding: 0.5rem 1rem;
-    font-size: 0.875rem;
-    font-weight: 600;
-    font-family: var(--body-font, 'Segoe UI', sans-serif);
-    color: var(--neutral-foreground-rest, #242424);
-    background-color: var(--neutral-layer-floating, #ffffff);
-    border: 1px solid var(--neutral-stroke-rest, #d1d1d1);
-    border-radius: calc(var(--control-corner-radius, 4) * 1px);
-    cursor: pointer;
-    transition: background-color 0.1s ease-in-out;
-}
-
-.account-card .external-providers .btn-external:hover {
-    background-color: var(--neutral-fill-hover, #e1e1e1);
-}
-
+/* ===== Alert ===== */
 .account-card .alert-warning {
     padding: 0.75rem 1rem;
     background-color: #fff4ce;
@@ -267,6 +381,7 @@
     font-size: 0.875rem;
 }
 
+/* ===== Utility ===== */
 .account-card .back-link {
     display: inline-flex;
     align-items: center;
@@ -285,30 +400,4 @@
     color: var(--neutral-foreground-hint, #616161);
     font-size: 0.875rem;
     margin-bottom: 1rem;
-}
-
-.language-switcher {
-    display: flex;
-    justify-content: center;
-    gap: 0.5rem;
-    margin-top: 1.5rem;
-}
-
-.language-switcher .language-link {
-    color: var(--neutral-foreground-hint, #616161);
-    text-decoration: none;
-    font-size: 0.8125rem;
-    padding: 0.25rem 0.5rem;
-    border-radius: calc(var(--control-corner-radius, 4) * 1px);
-    transition: background-color 0.1s ease-in-out;
-}
-
-.language-switcher .language-link:hover {
-    background-color: var(--neutral-fill-hover, #e1e1e1);
-    color: var(--neutral-foreground-rest, #242424);
-}
-
-.language-switcher .language-link.active {
-    color: var(--accent-foreground-rest, #0078d4);
-    font-weight: 600;
 }

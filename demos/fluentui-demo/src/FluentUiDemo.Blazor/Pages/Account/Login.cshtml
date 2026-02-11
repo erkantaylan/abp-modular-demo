@@ -31,10 +31,29 @@
 <body>
 <div class="account-layout">
     <div class="account-card">
-        <h4>@L["Login"]</h4>
+        @if (languages.Count > 1)
+        {
+            <div class="card-language-selector">
+                <div class="fluent-select-wrapper">
+                    <select class="fluent-select"
+                            onchange="window.location.href='/culture/switch?culture='+encodeURIComponent(this.value)+'&amp;returnUrl=@Uri.EscapeDataString(currentPageUrl)'"
+                            aria-label="Language">
+                        @foreach (var language in languages)
+                        {
+                            <option value="@language.CultureName" selected="@(language.CultureName == currentCulture)">@language.DisplayName</option>
+                        }
+                    </select>
+                    <svg class="fluent-select-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M2.15 4.65a.5.5 0 0 1 .7 0L6 7.79l3.15-3.14a.5.5 0 0 1 .7.7l-3.5 3.5a.5.5 0 0 1-.7 0l-3.5-3.5a.5.5 0 0 1 0-.7Z" fill="currentColor"/>
+                    </svg>
+                </div>
+            </div>
+        }
+
+        <h4 class="card-title">@L["Login"]</h4>
         @if (await SettingProvider.IsTrueAsync(AccountSettingNames.IsSelfRegistrationEnabled))
         {
-            <div class="subtitle">
+            <div class="card-subtitle">
                 @L["AreYouANewUser"]
                 <a href="@Url.Page("./Register", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})">@L["Register"]</a>
             </div>
@@ -42,35 +61,44 @@
 
         @if (Model.EnableLocalLogin)
         {
-            <form method="post" class="account-form">
-                <div class="form-field">
-                    <label asp-for="LoginInput.UserNameOrEmailAddress"></label>
-                    <input asp-for="LoginInput.UserNameOrEmailAddress" class="form-control" autofocus />
-                    <span asp-validation-for="LoginInput.UserNameOrEmailAddress" class="validation-error"></span>
+            <form method="post" class="login-form">
+                <div class="fluent-field">
+                    <label class="fluent-field-label" asp-for="LoginInput.UserNameOrEmailAddress"></label>
+                    <input asp-for="LoginInput.UserNameOrEmailAddress" class="fluent-input" autofocus placeholder=" " />
+                    <span asp-validation-for="LoginInput.UserNameOrEmailAddress" class="fluent-validation-message"></span>
                 </div>
 
-                <div class="form-field">
-                    <label asp-for="LoginInput.Password"></label>
-                    <div class="password-group">
-                        <input type="password" asp-for="LoginInput.Password" autocomplete="current-password" maxlength="@IdentityUserConsts.MaxPasswordLength" />
-                        <button class="toggle-password" type="button" id="PasswordVisibilityButton" aria-label="Toggle password visibility">&#128065;</button>
+                <div class="fluent-field">
+                    <label class="fluent-field-label" asp-for="LoginInput.Password"></label>
+                    <div class="fluent-input-group">
+                        <input type="password" asp-for="LoginInput.Password" class="fluent-input" autocomplete="current-password" maxlength="@IdentityUserConsts.MaxPasswordLength" placeholder=" " />
+                        <button class="fluent-input-end-button" type="button" id="PasswordVisibilityButton" aria-label="Toggle password visibility">
+                            <svg id="eyeIcon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3.26 11.6a.5.5 0 0 1-.18-.68C4.41 8.77 7 7 10 7s5.59 1.77 6.92 3.92a.5.5 0 0 1-.84.55C14.88 9.58 12.6 8 10 8S5.12 9.58 3.94 11.47a.5.5 0 0 1-.68.13ZM10 10a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Zm-1.5 2.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z" fill="currentColor"/>
+                            </svg>
+                        </button>
                     </div>
-                    <span asp-validation-for="LoginInput.Password" class="validation-error"></span>
+                    <span asp-validation-for="LoginInput.Password" class="fluent-validation-message"></span>
                 </div>
 
-                <div class="remember-forgot-row">
-                    <label>
-                        <input asp-for="LoginInput.RememberMe" />
-                        @L["RememberMe"]
+                <div class="fluent-checkbox-row">
+                    <label class="fluent-checkbox">
+                        <input asp-for="LoginInput.RememberMe" type="checkbox" />
+                        <span class="fluent-checkbox-indicator">
+                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.76 3.2a.75.75 0 0 1 .04 1.06l-4.25 4.5a.75.75 0 0 1-1.08.02L2.22 6.53a.75.75 0 0 1 1.06-1.06l1.72 1.72 3.7-3.93a.75.75 0 0 1 1.06-.04Z" fill="currentColor"/>
+                            </svg>
+                        </span>
+                        <span class="fluent-checkbox-label">@L["RememberMe"]</span>
                     </label>
-                    <a href="@Url.Page("./ForgotPassword", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})">@L["ForgotPassword"]</a>
+                    <a href="@Url.Page("./ForgotPassword", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})" class="fluent-link">@L["ForgotPassword"]</a>
                 </div>
 
-                <div class="buttons">
-                    <button type="submit" class="btn-primary" name="Action" value="Login">@L["Login"]</button>
+                <div class="form-actions">
+                    <button type="submit" class="fluent-button fluent-button-accent" name="Action" value="Login">@L["Login"]</button>
                     @if (Model.ShowCancelButton)
                     {
-                        <button type="submit" class="btn-secondary" formnovalidate="formnovalidate" name="Action" value="Cancel">@L["Cancel"]</button>
+                        <button type="submit" class="fluent-button fluent-button-outline" formnovalidate="formnovalidate" name="Action" value="Cancel">@L["Cancel"]</button>
                     }
                 </div>
             </form>
@@ -78,12 +106,12 @@
 
         @if (Model.VisibleExternalProviders.Any())
         {
-            <div class="divider">@L["OrLoginWith"]</div>
+            <div class="divider"><span>@L["OrLoginWith"]</span></div>
             <form asp-page="./Login" asp-page-handler="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" asp-route-returnUrlHash="@Model.ReturnUrlHash" method="post">
                 <div class="external-providers">
                     @foreach (var provider in Model.VisibleExternalProviders)
                     {
-                        <button type="submit" class="btn-external" name="provider" value="@provider.AuthenticationScheme" title="@L["LogInUsingYourProviderAccount", provider.DisplayName]">@provider.DisplayName</button>
+                        <button type="submit" class="fluent-button fluent-button-outline" name="provider" value="@provider.AuthenticationScheme" title="@L["LogInUsingYourProviderAccount", provider.DisplayName]">@provider.DisplayName</button>
                     }
                 </div>
             </form>
@@ -97,23 +125,21 @@
             </div>
         }
     </div>
-    @if (languages.Count > 1)
-    {
-        <div class="language-switcher">
-            @foreach (var language in languages)
-            {
-                var activeClass = language.CultureName == currentCulture ? "active" : "";
-                <a href="/culture/switch?culture=@Uri.EscapeDataString(language.CultureName)&returnUrl=@Uri.EscapeDataString(currentPageUrl)" class="language-link @activeClass">@language.DisplayName</a>
-            }
-        </div>
-    }
 </div>
 
 <script>
     document.getElementById('PasswordVisibilityButton')?.addEventListener('click', function () {
         var input = document.querySelector('input[name="LoginInput.Password"]');
         if (input) {
-            input.type = input.type === 'password' ? 'text' : 'password';
+            var isPassword = input.type === 'password';
+            input.type = isPassword ? 'text' : 'password';
+            // Swap to crossed-out eye when password is visible
+            var svg = document.getElementById('eyeIcon');
+            if (isPassword) {
+                svg.innerHTML = '<path d="M2.85 2.15a.5.5 0 1 0-.7.7l3.5 3.5a6.47 6.47 0 0 0-2.57 2.57.5.5 0 0 0 .84.55A5.48 5.48 0 0 1 6.2 7.2l1.35 1.35a2.5 2.5 0 0 0 3.4 3.4l4.2 4.2a.5.5 0 0 0 .7-.7l-13-13ZM9.88 10.58a1.5 1.5 0 0 1-1.96-1.96l1.96 1.96ZM10 7c-.57 0-1.12.08-1.64.22l.87.87A2.5 2.5 0 0 1 12.32 11.18l.76.76A6.47 6.47 0 0 0 16.08 8.92a.5.5 0 0 0-.84-.55A5.48 5.48 0 0 1 10 11.5c-.57 0-1.12-.08-1.64-.22" fill="currentColor"/>';
+            } else {
+                svg.innerHTML = '<path d="M3.26 11.6a.5.5 0 0 1-.18-.68C4.41 8.77 7 7 10 7s5.59 1.77 6.92 3.92a.5.5 0 0 1-.84.55C14.88 9.58 12.6 8 10 8S5.12 9.58 3.94 11.47a.5.5 0 0 1-.68.13ZM10 10a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Zm-1.5 2.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z" fill="currentColor"/>';
+            }
         }
     });
 </script>
