@@ -1,0 +1,30 @@
+<Solution>
+    <Folder Name="/0. Aspire/">
+        <Project Path="src/AngularDemo.AppHost/AngularDemo.AppHost.csproj" />
+        <Project Path="src/AngularDemo.ServiceDefaults/AngularDemo.ServiceDefaults.csproj" />
+    </Folder>
+    <Folder Name="/1. Domain/">
+        <Project Path="src/AngularDemo.Domain.Shared/AngularDemo.Domain.Shared.csproj" />
+        <Project Path="src/AngularDemo.Domain/AngularDemo.Domain.csproj" />
+    </Folder>
+    <Folder Name="/2. Application/">
+        <Project Path="src/AngularDemo.Application.Contracts/AngularDemo.Application.Contracts.csproj" />
+        <Project Path="src/AngularDemo.Application/AngularDemo.Application.csproj" />
+    </Folder>
+    <Folder Name="/3. Infrastructure/">
+        <Project Path="src/AngularDemo.EntityFrameworkCore/AngularDemo.EntityFrameworkCore.csproj" />
+        <Project Path="src/AngularDemo.HttpApi/AngularDemo.HttpApi.csproj" />
+        <Project Path="src/AngularDemo.HttpApi.Client/AngularDemo.HttpApi.Client.csproj" />
+    </Folder>
+    <Folder Name="/4. Host/">
+        <Project Path="src/AngularDemo.HttpApi.Host/AngularDemo.HttpApi.Host.csproj" />
+        <Project Path="src/AngularDemo.DbMigrator/AngularDemo.DbMigrator.csproj" />
+    </Folder>
+    <Folder Name="/test/">
+        <Project Path="test/AngularDemo.TestBase/AngularDemo.TestBase.csproj" />
+        <Project Path="test/AngularDemo.Domain.Tests/AngularDemo.Domain.Tests.csproj" />
+        <Project Path="test/AngularDemo.Application.Tests/AngularDemo.Application.Tests.csproj" />
+        <Project Path="test/AngularDemo.EntityFrameworkCore.Tests/AngularDemo.EntityFrameworkCore.Tests.csproj" />
+        <Project Path="test/AngularDemo.HttpApi.Client.ConsoleTestApp/AngularDemo.HttpApi.Client.ConsoleTestApp.csproj" />
+    </Folder>
+</Solution>
