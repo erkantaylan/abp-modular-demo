@@ -7,13 +7,24 @@ var postgres = builder.AddPostgres("postgres")
 
 var database = postgres.AddDatabase("Default");
 
+// Install ABP client-side libs (login/account MVC pages need them)
+var installLibs = builder.AddExecutable("install-libs", "abp", "../AngularDemo.HttpApi.Host", "install-libs")
+    .ExcludeFromManifest();
+
 var dbMigrator = builder.AddProject<Projects.AngularDemo_DbMigrator>("dbmigrator")
     .WithReference(database)
     .WaitFor(database);
 
-builder.AddProject<Projects.AngularDemo_HttpApi_Host>("httpapi-host")
+var apiHost = builder.AddProject<Projects.AngularDemo_HttpApi_Host>("httpapi-host")
     .WithExternalHttpEndpoints()
     .WithReference(database)
-    .WaitForCompletion(dbMigrator);
+    .WaitForCompletion(dbMigrator)
+    .WaitForCompletion(installLibs);
+
+// Angular SPA dev server (npm start → ng serve on port 4200)
+builder.AddNpmApp("angular", "../../angular", "start")
+    .WithHttpEndpoint(port: 4200, env: "PORT")
+    .WithExternalHttpEndpoints()
+    .WaitFor(apiHost);
 
 builder.Build().Run();
