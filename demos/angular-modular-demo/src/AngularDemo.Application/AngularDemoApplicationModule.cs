@@ -1,4 +1,5 @@
-﻿using Volo.Abp.PermissionManagement;
+﻿using Volo.Abp.AspNetCore.SignalR;
+using Volo.Abp.PermissionManagement;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.Account;
 using Volo.Abp.Identity;
@@ -18,7 +19,8 @@ namespace AngularDemo;
     typeof(AbpIdentityApplicationModule),
     typeof(AbpAccountApplicationModule),
     typeof(AbpTenantManagementApplicationModule),
-    typeof(AbpSettingManagementApplicationModule)
+    typeof(AbpSettingManagementApplicationModule),
+    typeof(AbpAspNetCoreSignalRModule)
     )]
 public class AngularDemoApplicationModule : AbpModule
 {

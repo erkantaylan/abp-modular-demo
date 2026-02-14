@@ -17,5 +17,13 @@ function configureRoutes() {
         order: 1,
         layout: eLayoutType.application,
       },
+      {
+        path: '/todos',
+        name: '::Menu:Todos',
+        iconClass: 'fas fa-check-square',
+        order: 2,
+        layout: eLayoutType.application,
+        requiredPolicy: 'AngularDemo.Todos',
+      },
   ]);
 }

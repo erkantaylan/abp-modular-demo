@@ -290,6 +290,9 @@ public class AngularDemoHttpApiHostModule : AbpModule
         });
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();
-        app.UseConfiguredEndpoints();
+        app.UseConfiguredEndpoints(endpoints =>
+        {
+            endpoints.MapHub<AngularDemo.Todos.TodoHub>("/signalr-hubs/todo");
+        });
     }
 }

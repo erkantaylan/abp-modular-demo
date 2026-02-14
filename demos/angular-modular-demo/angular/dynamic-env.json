@@ -1,2 +1,25 @@
 {
+  "production": true,
+  "application": {
+    "baseUrl": "http://localhost:4200",
+    "name": "AngularDemo"
+  },
+  "oAuthConfig": {
+    "issuer": "http://localhost:44340/",
+    "redirectUri": "http://localhost:4200",
+    "clientId": "AngularDemo_App",
+    "responseType": "code",
+    "scope": "offline_access AngularDemo",
+    "requireHttps": false
+  },
+  "apis": {
+    "default": {
+      "url": "http://localhost:44340",
+      "rootNamespace": "AngularDemo"
+    },
+    "AbpAccountPublic": {
+      "url": "http://localhost:44340/",
+      "rootNamespace": "AbpAccountPublic"
+    }
+  }
 }

@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: AngularDemo
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  dbmigrator:
+    build:
+      context: .
+      dockerfile: src/AngularDemo.DbMigrator/Dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      ConnectionStrings__Default: "Host=postgres;Port=5432;Database=AngularDemo;Username=postgres;Password=postgres"
+      OpenIddict__Applications__AngularDemo_App__ClientId: "AngularDemo_App"
+      OpenIddict__Applications__AngularDemo_App__RootUrl: "http://localhost:4200"
+      OpenIddict__Applications__AngularDemo_Swagger__ClientId: "AngularDemo_Swagger"
+      OpenIddict__Applications__AngularDemo_Swagger__RootUrl: "http://localhost:44340"
+
+  httpapi-host:
+    build:
+      context: .
+      dockerfile: src/AngularDemo.HttpApi.Host/Dockerfile
+    ports:
+      - "44340:80"
+    depends_on:
+      dbmigrator:
+        condition: service_completed_successfully
+    environment:
+      ASPNETCORE_URLS: "http://+:80"
+      ASPNETCORE_ENVIRONMENT: "Development"
+      App__SelfUrl: "http://localhost:44340"
+      App__AngularUrl: "http://localhost:4200"
+      App__CorsOrigins: "http://localhost:4200"
+      App__RedirectAllowedUrls: "http://localhost:4200"
+      ConnectionStrings__Default: "Host=postgres;Port=5432;Database=AngularDemo;Username=postgres;Password=postgres"
+      AuthServer__Authority: "http://localhost:44340"
+      AuthServer__RequireHttpsMetadata: "false"
+      AuthServer__SwaggerClientId: "AngularDemo_Swagger"
+      AuthServer__CertificatePassPhrase: "9643d757-38d9-4daf-a731-849512598df6"
+      OpenIddict__Applications__AngularDemo_App__ClientId: "AngularDemo_App"
+      OpenIddict__Applications__AngularDemo_App__RootUrl: "http://localhost:4200"
+      OpenIddict__Applications__AngularDemo_Swagger__ClientId: "AngularDemo_Swagger"
+      OpenIddict__Applications__AngularDemo_Swagger__RootUrl: "http://localhost:44340"
+
+  angular:
+    build:
+      context: ./angular
+      dockerfile: Dockerfile
+    ports:
+      - "4200:80"
+    depends_on:
+      - httpapi-host
+
+volumes:
+  postgres-data:

@@ -3,7 +3,23 @@
   "Texts": {
     "AppName": "AngularDemo",
     "Menu:Home": "Home",
+    "Menu:Todos": "Todos",
     "LongWelcomeMessage": "Welcome to the application. This is a startup project based on the ABP framework. For more information visit",
-    "Welcome": "Welcome"
+    "Welcome": "Welcome",
+    "Permission:Todos": "Todo Management",
+    "Permission:Todos.Create": "Create Todos",
+    "Permission:Todos.Complete": "Complete Todos",
+    "Todos": "Todos",
+    "NewTodo": "New Todo",
+    "TodoTitle": "Title",
+    "TodoDescription": "Description",
+    "TodoCreatedBy": "Created By",
+    "TodoCompletedBy": "Completed By",
+    "TodoCreationTime": "Created",
+    "TodoCompletionTime": "Completed",
+    "TodoStatus": "Status",
+    "TodoPending": "Pending",
+    "TodoCompleted": "Completed",
+    "MarkComplete": "Complete"
   }
 }

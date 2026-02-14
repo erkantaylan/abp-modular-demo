@@ -11,8 +11,9 @@ public class AngularDemoPermissionDefinitionProvider : PermissionDefinitionProvi
     {
         var myGroup = context.AddGroup(AngularDemoPermissions.GroupName);
 
-        //Define your own permissions here. Example:
-        //myGroup.AddPermission(AngularDemoPermissions.MyPermission1, L("Permission:MyPermission1"));
+        var todosPermission = myGroup.AddPermission(AngularDemoPermissions.Todos.Default, L("Permission:Todos"));
+        todosPermission.AddChild(AngularDemoPermissions.Todos.Create, L("Permission:Todos.Create"));
+        todosPermission.AddChild(AngularDemoPermissions.Todos.Complete, L("Permission:Todos.Complete"));
     }
 
     private static LocalizableString L(string name)

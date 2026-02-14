@@ -1,3 +1,4 @@
+using AngularDemo.Todos;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
@@ -26,6 +27,7 @@ public class AngularDemoDbContext :
     IIdentityDbContext
 {
     /* Add DbSet properties for your Aggregate Roots / Entities here. */
+    public DbSet<Todo> Todos { get; set; }
 
 
     #region Entities from the modules
@@ -81,11 +83,13 @@ public class AngularDemoDbContext :
         
         /* Configure your own tables/entities inside here */
 
-        //builder.Entity<YourEntity>(b =>
-        //{
-        //    b.ToTable(AngularDemoConsts.DbTablePrefix + "YourEntities", AngularDemoConsts.DbSchema);
-        //    b.ConfigureByConvention(); //auto configure for the base class props
-        //    //...
-        //});
+        builder.Entity<Todo>(b =>
+        {
+            b.ToTable(AngularDemoConsts.DbTablePrefix + "Todos", AngularDemoConsts.DbSchema);
+            b.ConfigureByConvention();
+            b.Property(x => x.Title).IsRequired().HasMaxLength(256);
+            b.Property(x => x.Description).HasMaxLength(1024);
+            b.HasIndex(x => x.IsCompleted);
+        });
     }
 }
