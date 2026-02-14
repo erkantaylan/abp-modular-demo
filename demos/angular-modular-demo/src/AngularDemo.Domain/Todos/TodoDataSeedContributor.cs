@@ -102,8 +102,17 @@ public class TodoDataSeedContributor : IDataSeedContributor, ITransientDependenc
 
     private async Task SeedTodosAsync()
     {
-        if (await _todoRepository.GetCountAsync() > 0)
+        try
         {
+            if (await _todoRepository.GetCountAsync() > 0)
+            {
+                return;
+            }
+        }
+        catch
+        {
+            // Table may not exist yet if migration hasn't been applied;
+            // skip seeding todos - they'll be created on next run
             return;
         }
 
