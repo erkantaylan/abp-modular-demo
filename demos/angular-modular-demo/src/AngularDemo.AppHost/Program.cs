@@ -15,12 +15,15 @@ var dbMigrator = builder.AddProject<Projects.AngularDemo_DbMigrator>("dbmigrator
     .WithReference(database)
     .WaitFor(database);
 
-builder.AddProject<Projects.AngularDemo_HttpApi_Host>("httpapi-host")
+var apiHost = builder.AddProject<Projects.AngularDemo_HttpApi_Host>("httpapi-host")
     .WithExternalHttpEndpoints()
     .WithReference(database)
     .WaitForCompletion(dbMigrator)
     .WaitForCompletion(installLibs);
 
-// Angular SPA: run separately with `cd angular && npm start`
+builder.AddNpmApp("angular", "../../angular", "start")
+    .WithHttpEndpoint(port: 4200, env: "PORT")
+    .WithExternalHttpEndpoints()
+    .WithReference(apiHost);
 
 builder.Build().Run();
