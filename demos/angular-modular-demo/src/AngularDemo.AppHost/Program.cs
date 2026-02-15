@@ -21,10 +21,10 @@ var apiHost = builder.AddProject<Projects.AngularDemo_HttpApi_Host>("httpapi-hos
     .WaitForCompletion(dbMigrator)
     .WaitForCompletion(installLibs);
 
-builder.AddJavaScriptApp("angular", "../../angular")
-    .WithRunScript("start")
-    .WithHttpEndpoint(port: 4200)
-    .WithExternalHttpEndpoints()
-    .WithReference(apiHost);
+builder.AddJavaScriptApp("angular", "../../angular", "start")
+    .WithNpm()
+    .WithReference(apiHost)
+    .WaitFor(apiHost)
+    .WithHttpEndpoint(env: "PORT");
 
 builder.Build().Run();
